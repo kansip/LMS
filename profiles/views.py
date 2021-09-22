@@ -1,24 +1,22 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+""" Функции обработки взаимодействия с user"""
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from LMS_settings.menu import *
-from profiles.forms import *
-# Create your views here.
+from LMS_settings.menu import get_context_menu, REGISTER_PAGE_NAME, LOGIN_PAGE_NAME
+from profiles.forms import RegisterForm, LoginForm
+
 
 def index(request):
-    """
-    Функция редиректа на главную страницу, либо же 
+    """ Функция редиректа на главную страницу, либо же """
 
-    """
     if not request.user.is_authenticated:
         return redirect('/login')
-    else:
-        return redirect('/main')
+    return redirect('/main')
 
 
 def register_view(request):
+    """ Функция регистрации нового пользователя  """
+
     context = {'menu': get_context_menu(request, REGISTER_PAGE_NAME)}
 
     if request.method == 'POST':
@@ -65,6 +63,8 @@ def register_view(request):
 
 
 def login_view(request):
+    """ Функция авторизации нового пользователя  """
+
     context = {'menu': get_context_menu(request, LOGIN_PAGE_NAME)}
 
     if not request.user.is_authenticated:
@@ -87,5 +87,4 @@ def login_view(request):
             context['error'] = 'Неверный логин или пароль'
 
         return render(request, 'login.html', context)
-    else:
-        return redirect('/')
+    return redirect('/')
