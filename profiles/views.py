@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from LMS_settings.menu import *
 from profiles.forms import *
 # Create your views here.
+
 def index(request):
     """
     Функция редиректа на главную страницу, либо же 
