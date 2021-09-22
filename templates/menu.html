@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">MyStudents</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% for item in menu.left %}
+                    {% if item.is_dropdown %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ item.title }}
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% for dropdown_item in item.items %}
+                                    <a class="dropdown-item"
+                                       href="{{ dropdown_item.url }}">{{ dropdown_item.title }}</a>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if item.is_active %} active {% endif %}"
+                               href="{{ item.url }}">{{ item.title }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            <ul class="navbar-nav my-2 my-lg-0">
+                {% for item in menu.right %}
+                    {% if item.is_dropdown %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ item.title }}
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% for dropdown_item in item.items %}
+                                    <a class="dropdown-item"
+                                       href="{{ dropdown_item.url }}">{{ dropdown_item.title }}</a>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if item.is_active %} active {% endif %}"
+                               href="{{ item.url }}">{{ item.title }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>
