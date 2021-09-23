@@ -33,6 +33,7 @@
             </ul>
 
             <ul class="navbar-nav my-2 my-lg-0">
+                <div class="nav-link">Ваш ID - {{menu.user}}</div>
                 {% for item in menu.right %}
                     {% if item.is_dropdown %}
                         <li class="nav-item dropdown">

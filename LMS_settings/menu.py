@@ -40,7 +40,8 @@ course_list_item = MenuItem(COURSE_LIST_NAME, "Мои курсы", "/course/list
 
 def get_context_menu(request, current_name):
     return {"left": get_context_left_menu(request, current_name),
-            "right": get_context_right_menu(request, current_name)}
+            "right": get_context_right_menu(request, current_name),
+            "user":request.user.id}
 
 
 def get_context_left_menu(request, current_name):
