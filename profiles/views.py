@@ -1,8 +1,9 @@
 """ Функции обработки взаимодействия с user"""
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from LMS_settings.menu import get_context_menu, REGISTER_PAGE_NAME, LOGIN_PAGE_NAME
+from LMS_settings.menu import get_context_menu, REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, HOME_PAGE_NAME
 from profiles.forms import RegisterForm, LoginForm
 
 
@@ -12,7 +13,6 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect('/login')
     return redirect('/main')
-
 
 def register_view(request):
     """ Функция регистрации нового пользователя  """
@@ -88,3 +88,9 @@ def login_view(request):
 
         return render(request, 'login.html', context)
     return redirect('/')
+
+
+@login_required
+def main_page_view(request):
+    context = {'menu': get_context_menu(request, HOME_PAGE_NAME)}
+    return render(request, 'index.html', context)
