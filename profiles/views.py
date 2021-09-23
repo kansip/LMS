@@ -1,5 +1,5 @@
 """ Функции обработки взаимодействия с user"""
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -94,3 +94,9 @@ def login_view(request):
 def main_page_view(request):
     context = {'menu': get_context_menu(request, HOME_PAGE_NAME)}
     return render(request, 'index.html', context)
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+    
