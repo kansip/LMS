@@ -3,9 +3,9 @@
 ## Запуск проекта
 1) Создать папку с проектом
 2) Открыть в BASH эту папку
-3) Сделать команду `git clone https://github.com/kansip/ManageStudents ./`
+3) Сделать команду `git clone https://github.com/kansip/LMS.git ./`
 4) В CMD создаем виртуальное окружение в рабочей директории для работы с Python `python -m venv venv`
-5) В CMD запускаем консоль виртуального окружения `venv\Scripts\activate`
+5) В CMD запускаем консоль виртуального окружения Windows `venv\Scripts\activate` / Linux `source venv/bin/activate`
 6) В CMD(venv) обновляем `pip install --upgrade pip`
 7) Установить нужные версии пакетов командой `pip install -r requirements.txt`
 8) Создаем миграцию базы данных `python manage.py migrate`
