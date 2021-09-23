@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from LMS_settings.menu import get_context_menu, REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, HOME_PAGE_NAME
+from LMS_settings.menu import get_context_menu, REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, HOME_PAGE_NAME, USER_PAGE_NAME
 from profiles.forms import RegisterForm, LoginForm
 
 
@@ -99,4 +99,9 @@ def main_page_view(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
-    
+
+@login_required
+def user_page_view(request, user_id):
+    context = {'menu': get_context_menu(request, USER_PAGE_NAME)}
+    user = User.objects.get(pk=user_id)
+    return render(request, 'user.html', context)
