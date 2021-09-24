@@ -3,5 +3,31 @@
 Курсы
 {% endblock %}
 {% block extended_content %}
+<div id="container" class="container mt-5 mb-5">
+<div style="border:1px solid grey;border-radius: 5px;padding: 10px;">
+  <div>
+    <img style="border-radius: 100%;width: 200px;height: 200px;" src="{{ course.image.url }}">
+  </div>
+  <div>Уроки курса {{ course.name }}</div>
+  <div>Преподаватель {{course.teacher}}</div>
+</div>
 
+  <br>
+
+
+<div>
+    <table class="table table-hover">
+  <tbody>
+  {%for lesson in lessons %}
+    <tr>
+      <td><a href="/course/{{course.id}}/{{lesson.id}}" style="color:black">{{lesson.name}}</a></td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+
+
+</div>
+
+</div>
 {% endblock %}

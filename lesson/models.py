@@ -1,10 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from course.models import Course
 # Create your models here.
 
 class Lesson(models.Model):
-    teacher = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    date = models.DateTimeField(null=True)
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+    )
     #blocks = models.ManyToManyField(TaskGroup)
     name = models.CharField(max_length=30)
     open = models.BooleanField(default=False)
