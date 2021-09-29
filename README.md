@@ -1,6 +1,6 @@
 ## Описание проекта
 Проект LMS (Learning Managment System) - то хранилище учебных материалов — видеоуроков, лекций, презентаций, книг и курсов, доступ к которым можно получить с любого устройства в любой точке мира.
-<img src="https://github.com/kansip/LMS/workflows/Pylint/badge.svg?branch=master">
+[![Pylint](https://github.com/kansip/LMS/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/kansip/LMS/actions/workflows/pylint.yml)
 ## Запуск проекта
 1) Создать папку с проектом
 2) Открыть в BASH эту папку
