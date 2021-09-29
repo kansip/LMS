@@ -1,3 +1,5 @@
+"""Логика шапки сайта (меню)"""
+
 class MenuItem:
     def __init__(self, name, title, url):
         self.name = name
@@ -26,7 +28,9 @@ HOME_PAGE_NAME = "index"
 
 USER_LIST_NAME =  "user_list"
 USER_TASK_NAME =  "task_list"
-COURSE_LIST_NAME =  "task_list"
+COURSE_STUDY_NAME =  "course_study"
+COURSE_CREATE_NAME = "course_create"
+COURSE_TEACHING_NAME = "course_teaching"
 login_menu_item = MenuItem(LOGIN_PAGE_NAME, "Вход", "/login")
 register_menu_item = MenuItem(REGISTER_PAGE_NAME, "Регистрация", "/register")
 
@@ -36,7 +40,9 @@ logout_menu_item = MenuItem(LOGOUT_PAGE_NAME, "Выход", "/logout")
 home_menu_item = MenuItem(HOME_PAGE_NAME, "Главная", "/")
 user_list_item = MenuItem(USER_LIST_NAME, "Список пользователей", "/user/list")
 user_task_item = MenuItem(USER_TASK_NAME, "Список всех задач", "/task/list")
-course_list_item = MenuItem(COURSE_LIST_NAME, "Мои курсы", "/course/list")
+course_study_item = MenuItem(COURSE_STUDY_NAME, "Мои курсы", "/course/study")
+course_create_item = MenuItem(COURSE_CREATE_NAME, "Создать курс", "/course/create")
+course_teaching_item = MenuItem(COURSE_TEACHING_NAME, "Преподавание", "/course/teaching")
 
 def get_context_menu(request, current_name):
     return {"left": get_context_left_menu(request, current_name),
@@ -48,19 +54,14 @@ def get_context_left_menu(request, current_name):
     menu = [home_menu_item]
 
     if request.user.is_authenticated:
-        menu.append(course_list_item)
-        pass
-        #print("menu")
-        #menu.append(votes_menu_item)
-        #menu.append(user_votes_menu_item)
-        #menu.append(votes_editor_menu_item)
+        menu.append(course_study_item)
     else:
         menu.append(login_menu_item)
         menu.append(register_menu_item)
 
-    if request.user.is_staff:  # teacher
-        menu.append(user_list_item)
-        menu.append(user_task_item)
+    if request.user.groups.filter(name="teachers").exists():  
+        menu.append(course_teaching_item)
+        menu.append(course_create_item)
     for item in menu:
         if item.name == current_name:
             item.is_active = True

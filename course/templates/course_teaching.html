@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+    Мои курсы
+{% endblock %}
+{% block extended_content %}
+<div class="container">
+    <br>
+    <h2 >Преподавание</h2>
+    <hr style="margin-top:30px">
+    {% for course in courses %}
+    <div style="height:300px;">
+        <br>
+        <a href="/course/{{course.id}}" style="color:black;font-size:23px;margin-left:350px;">{{course.name}}</a><br>
+        <div href="/course/{{course.id}}" style="color:black;font-size:17px;margin-left:350px;">{{course.teacher}}</div>
+        <img style="border-radius: 100%;width: 200px;height: 200px;" src="{{ course.image.url }}">
+
+    </div><hr>
+    {% endfor %}
+</div>
+{% endblock %}
