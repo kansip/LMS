@@ -17,7 +17,6 @@ mccabe==0.6.1
 packaging==21.0
 pep8==1.7.1
 Pillow==8.3.2
-pkg_resources==0.0.0
 platformdirs==2.4.0
 pycodestyle==2.7.0
 Pygments==2.10.0
