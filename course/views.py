@@ -30,8 +30,6 @@ def course_view(request, course_id):
         raise Http404("There is no course with this id")
     except Group.DoesNotExist: #Ответ на не существующую группу
         raise Http404("You don't belong to this group")
-    
-    
 
 @login_required
 def course_study_list(request):
@@ -44,7 +42,7 @@ def course_study_list(request):
             course=Course.objects.get(students=group)
         except:
             continue
-        if course.open == True:
+        if course.open:
             courses.append(course)
     context["courses"]=courses
     return render(request, 'course_study.html', context)
@@ -58,7 +56,7 @@ def course_create(request):
         create_course_form = CreateCourseForm(request.POST)
         print(create_course_form.is_valid())
         if create_course_form.is_valid():
-            #получение данных из формы
+            # получение данных из формы
             name_date = create_course_form.cleaned_data['name']
             description_date = create_course_form.cleaned_data['description']
             image_date = request.FILES['image']
@@ -68,8 +66,7 @@ def course_create(request):
             filename = fs.save(image_date.name, image_date)
 
             #создаем курс
-            course = Course.objects.create(name=name_date,description=description_date, \
-                image=image_date,teacher=request.user)
+            course = Course.objects.create(name=name_date,description=description_date, image=image_date,teacher=request.user)
             
             name_group=group_course_name(course.id)
             group=Group.objects.create(name=name_group)
@@ -77,7 +74,6 @@ def course_create(request):
             course.save()
             return redirect("/course/"+str(course.id))
     return render(request, 'course_create.html', context)
-
 
 @login_required
 @staff_member_required
