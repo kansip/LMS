@@ -21,8 +21,9 @@ def course_view(request, course_id):
         context['course']=course
         context['lessons']=Lesson.objects.filter(course_id=course_id)
         name_group=group_course_name(course_id)
-        if request.user.groups.filter(name=name_group).exists() or \
-                course.teacher == request.user:
+        if request.user.groups.filter(name=name_group).exists():
+            return render(request, 'course.html', context)
+        elif request.user == course.teacher:
             return render(request, 'course.html', context)
         else:
             raise Http404("Вы не подключены к курсу")
@@ -82,3 +83,10 @@ def course_teaching_list(request):
     context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
     context["courses"]=Course.objects.filter(teacher=request.user)
     return render(request, 'course_teaching.html', context)
+
+@login_required
+@staff_member_required
+def course_settings(request, course_id):
+    context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
+    context["course"]=Course.objects.get(id=course_id)
+    return render(request, 'course_settings.html', context)
