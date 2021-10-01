@@ -10,4 +10,5 @@ class Lesson(models.Model):
     )
     #blocks = models.ManyToManyField(TaskGroup)
     name = models.CharField(max_length=30)
+    date = models.DateTimeField()
     open = models.BooleanField(default=False)

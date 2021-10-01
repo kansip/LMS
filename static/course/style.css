@@ -1,0 +1,70 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs__links {
+    display: flex;
+    flex-direction: row;
+    order: 0;
+    white-space: nowrap;
+    margin-bottom: 15px;
+}
+
+.tabs__links>a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 50px;
+    text-align: center;
+}
+
+.tabs__links>a:hover {
+    background-color: rgba(227, 242, 253, 0.3);
+}
+
+.tabs>#content-1:target~.tabs__links>a[href="#content-1"],
+.tabs>#content-2:target~.tabs__links>a[href="#content-2"],
+.tabs>#content-3:target~.tabs__links>a[href="#content-3"],
+.tabs>#content-4:target~.tabs__links>a[href="#content-4"] {
+    cursor: default;
+}
+
+.tabs>div:not(.tabs__links) {
+    display: none;
+    order: 1;
+    flex-grow: 1;
+}
+
+@media (min-width: 576px) {
+    .tabs {
+    flex-direction: row;
+}
+
+.tabs__links {
+    flex-direction: column;
+    border: none;
+    box-shadow: none;
+}
+
+.tabs__links>a {
+    margin-bottom: 8px;
+}
+
+.tabs__links>a:last-child {
+    margin-bottom: 0;
+}
+
+.tabs>div:not(.tabs__links) {
+    padding-left: 15px;
+}
+}
+
+.tabs>div:target {
+    display: block;
+}

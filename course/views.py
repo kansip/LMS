@@ -89,4 +89,7 @@ def course_teaching_list(request):
 def course_settings(request, course_id):
     context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
     context["course"]=Course.objects.get(id=course_id)
+    context["teachers"]=Group.objects.get(name="teachers").user_set.all()
+    context["students"]=Course.objects.get(id=course_id).students.user_set.all()
+    context['lessons']=Lesson.objects.filter(course_id=course_id)
     return render(request, 'course_settings.html', context)

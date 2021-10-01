@@ -1,11 +1,117 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
 Курсы
+{% endblock %}
+{% block extended_css %}
+<link rel="stylesheet" href="{% static 'course/style.css' %}">
 {% endblock %}
 {% block extended_content %}
 <div id="container" class="container mt-5 mb-5">
 <div style="border:1px solid grey;border-radius: 5px;padding: 10px;">
-        <h1 style="text-align: center;">Настройки курса {{course.name}}</h1>
+        <h3 style="text-align: center;">Настройки курса {{course.name}}</h1>
+        
+        <div class="tabs">
+                <div id="content-1">
+                        <form>
+                                <div class="form-group">
+                                        <label for="exampleInputPassword1">Название курса</label>
+                                        <input type="text" class="form-control" id="exampleInputPassword1" value="Mark"> 
+                                </div>
+                                <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">Описание</label>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">{{course.description}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                        <label for="exampleFormControlSelect1">Преподаватель</label>
+                                        <select class="form-control" id="exampleFormControlSelect1">
+                                        {% for teacher in teachers %}
+                                                <option>{{ teacher }}</option>
+                                        {% endfor %}
+                                        </select>
+                                      </div>
+                                <div class="form-group">
+                                        <label for="exampleFormControlFile1">Логотип курса</label>
+                                        <input name="image" type="file" class="form-control-file" required>
+                                </div>
+                                <div class="form-check" style="text-align: center;">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                        <label class="form-check-label" for="exampleCheck1">Открыт</label>
+                                </div>
 
-</div>
+                                <div style="text-align: center;">
+                                        <button type="submit"  class="btn btn-primary">Обновить</button>
+                                </div>
+                        </form>            
+                </div>
+                <div id="content-2">
+                        <form method="POST" class="form-inline" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                          <div class="input-group-text">id</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="User ID">
+                                      </div>
+                                <button type="submit" class="btn btn-primary mb-2">Добавить</button>
+                                <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Login</th>
+                                            <th scope="col">Имя</th>
+                                            <th scope="col">Фамилия</th>
+                                            <th scope="col">Последний вход</th>
+                                            <th scope="col">Исключить</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for stud in students %}
+                                          <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td><a href="/user/{{ stud.id }}">{{ stud }}</a></td>
+                                            <td>{{ stud.first_name }}</td>
+                                            <td>{{ stud.last_name }}</td>
+                                            <td>{{ stud.date_joined }}</td>
+                                            <td><button type="button" class="close" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button></td>
+                                          </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                      </table>
+                        </form>
+                </div>
+                <div id="content-3">
+                        <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Тема занятия</th>
+                                    <th scope="col">Дата занятия</th>
+                                    <th scope="col">Открыто</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                {% for lesson in lessons %}
+                                  <tr>
+                                    <th>{{lesson.name}}</th>
+                                    <td>{{lesson.date}}</td>
+                                    <td>Otto</td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                              </table>
+                </div>
+                <div id="content-4">
+                        Содержимое 4...
+                </div>
+        
+                <div class="tabs__links">
+                <a href="#content-1"> Основная информация</a>
+                <a href="#content-2">Ученики</a>
+                <a href="#content-3">Занятия</a>
+                <a href="#content-4">Доп.блок</a>
+                </div>
+        </div>
+</div>  
 {% endblock %}

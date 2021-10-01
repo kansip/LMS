@@ -1,5 +1,6 @@
 """ Функции обработки взаимодействия с user"""
 from django.contrib.auth import authenticate, login, logout
+from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -103,5 +104,12 @@ def logout_view(request):
 @login_required
 def user_page_view(request, user_id):
     context = {'menu': get_context_menu(request, USER_PAGE_NAME)}
-    user = User.objects.get(pk=user_id)
-    return render(request, 'user.html', context)
+    try:
+        user = User.objects.get(id=user_id)
+        context["user"]=user
+    except:
+        raise Http404("Такого нет")
+    if request.user.is_staff or request.user.id==user_id:
+        return render(request, 'user.html', context)
+    else:
+        raise Http404("У вас нет прав")
