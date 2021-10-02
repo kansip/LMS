@@ -9,4 +9,4 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course', blank=True)
     description = models.CharField(max_length=100, blank=True)
     open = models.BooleanField(default=False)
-    students = models.ForeignKey(Group,null=True,on_delete=models.SET_NULL)
+    students = models.ForeignKey(Group,null=True,on_delete=models.CASCADE)

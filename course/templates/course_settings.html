@@ -13,7 +13,7 @@
         
         <div class="tabs">
                 <div id="content-1">
-                        <form>
+                        <form action="">
                                 <div class="form-group">
                                         <label for="exampleInputPassword1">Название курса</label>
                                         <input type="text" class="form-control" id="exampleInputPassword1" value="Mark"> 
@@ -32,7 +32,7 @@
                                       </div>
                                 <div class="form-group">
                                         <label for="exampleFormControlFile1">Логотип курса</label>
-                                        <input name="image" type="file" class="form-control-file" required>
+                                        <input name="image" type="file" class="form-control-file">
                                 </div>
                                 <div class="form-check" style="text-align: center;">
                                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -72,17 +72,21 @@
                                             <td><a href="/user/{{ stud.id }}">{{ stud }}</a></td>
                                             <td>{{ stud.first_name }}</td>
                                             <td>{{ stud.last_name }}</td>
-                                            <td>{{ stud.date_joined }}</td>
+                                            <td>{{ stud.last_login }}</td>
                                             <td><button type="button" class="close" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                               </button></td>
                                           </tr>
                                         {% endfor %}
                                         </tbody>
+
                                       </table>
                         </form>
                 </div>
                 <div id="content-3">
+                        <div style="text-align: center; margin: 30px;">
+                                <a style="color:white;" class="btn btn-primary">Добавить занятие</a>
+                        </div>
                         <table class="table">
                                 <thead>
                                   <tr>
@@ -100,7 +104,8 @@
                                   </tr>
                                 {% endfor %}
                                 </tbody>
-                              </table>
+                        </table>
+                        
                 </div>
                 <div id="content-4">
                         Содержимое 4...
@@ -110,7 +115,7 @@
                 <a href="#content-1"> Основная информация</a>
                 <a href="#content-2">Ученики</a>
                 <a href="#content-3">Занятия</a>
-                <a href="#content-4">Доп.блок</a>
+                <a style="color: red;" href="/course/{{course.id}}/delete">Удалить курс</a>
                 </div>
         </div>
 </div>  

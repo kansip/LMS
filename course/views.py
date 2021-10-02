@@ -48,7 +48,6 @@ def course_study_list(request):
     context["courses"]=courses
     return render(request, 'course_study.html', context)
 
-@login_required
 @staff_member_required
 def course_create(request):
     """Создание курса"""
@@ -76,7 +75,6 @@ def course_create(request):
             return redirect("/course/"+str(course.id))
     return render(request, 'course_create.html', context)
 
-@login_required
 @staff_member_required
 def course_teaching_list(request):
     """Список курсов, на которых преподает аккаунт"""
@@ -84,12 +82,25 @@ def course_teaching_list(request):
     context["courses"]=Course.objects.filter(teacher=request.user)
     return render(request, 'course_teaching.html', context)
 
-@login_required
 @staff_member_required
 def course_settings(request, course_id):
     context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
-    context["course"]=Course.objects.get(id=course_id)
-    context["teachers"]=Group.objects.get(name="teachers").user_set.all()
-    context["students"]=Course.objects.get(id=course_id).students.user_set.all()
-    context['lessons']=Lesson.objects.filter(course_id=course_id)
+    try:
+        context["course"]=Course.objects.get(id=course_id)
+        context["teachers"]=Group.objects.get(name="teachers").user_set.all()
+        context["students"]=Course.objects.get(id=course_id).students.user_set.all()
+        context['lessons']=Lesson.objects.filter(course_id=course_id)
+    except:
+        raise Http404("Такого курса не существует")
     return render(request, 'course_settings.html', context)
+
+@staff_member_required
+def course_delete(request, course_id):
+    """Удаление курса с переданным id"""
+    context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
+    try:
+        Group.objects.filter(name=group_course_name(course_id)).delete()
+        Course.objects.filter(id=course_id).delete()
+    except:
+        raise Http404("Косяк при удаление курса")
+    return redirect('/')
