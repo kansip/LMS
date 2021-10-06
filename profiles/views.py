@@ -76,9 +76,6 @@ def login_view(request):
                 login_data = login_form.cleaned_data['login']
                 password_data = login_form.cleaned_data['password']
 
-                print(login_data)
-                print(password_data)
-
                 user = authenticate(request, username=login_data, password=password_data)
 
                 if user is not None:

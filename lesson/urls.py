@@ -1,7 +1,7 @@
-"""LMS_settings URL Configuration
+"""ManageStudents URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
+    https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -13,16 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from course.views import *
-from django import urls
 from django.urls import path
+from lesson.views import *
 
 urlpatterns = [
-    path('<int:course_id>', course_view),
-    path('<int:course_id>/settings', course_settings),
-    path('<int:course_id>/delete', course_delete),
-    path('<int:course_id>/settings_info', course_settings_info),
-    path('study', course_study_list),
-    path('teaching', course_teaching_list),
-    path('create',course_create)
+    path('<int:lesson_id>', lesson_view),
+
 ]

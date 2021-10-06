@@ -104,3 +104,7 @@ def course_delete(request, course_id):
     except:
         raise Http404("Косяк при удаление курса")
     return redirect('/')
+
+@staff_member_required
+def course_settings_info(request, course_id):
+    pass
