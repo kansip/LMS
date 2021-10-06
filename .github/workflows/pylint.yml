@@ -20,4 +20,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Pylint
       run: |
-        pylint `ls -R|grep .py$|xargs` || true
+        pylint `ls -R|grep .py$|xargs`
