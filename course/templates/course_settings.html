@@ -48,7 +48,7 @@
                                         <div class="input-group-prepend">
                                           <div class="input-group-text">id</div>
                                         </div>
-                                        <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="User ID">
+                                        <input type="text" name="id" class="form-control" id="inlineFormInputGroupUsername2" placeholder="User ID">
                                       </div>
                                 <button type="submit" name="add_user_to_course" class="btn btn-primary mb-2">Добавить</button>
                         </form>
@@ -71,9 +71,9 @@
                                         <td>{{ stud.first_name }}</td>
                                         <td>{{ stud.last_name }}</td>
                                         <td>{{ stud.last_login }}</td>
-                                        <td><button type="button" class="close" aria-label="Close">
+                                        <td><form method="GET"><button value="{{ stud.id }}" name="delete" class="close" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
-                                        </button></td>
+                                        </button></form></td>
                                         </tr>
                                 {% endfor %}
                                 </tbody>

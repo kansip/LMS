@@ -16,3 +16,7 @@ class SettingsInfoCourseForm(forms.Form):
     image = forms.ImageField(required=False)
     #teachers = forms.ChoiceField(choices = [(user.id, user.username) for user in Group.objects.get(name="teachers").user_set.all()],required=False)
     open = forms.BooleanField(required=False)
+
+class SettingsStudentListCourseForm(forms.Form):
+    """ Форма добавление нового пользователя курса"""
+    id = forms.IntegerField()

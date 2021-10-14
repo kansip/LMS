@@ -1,5 +1,5 @@
 from unittest import signals
-from course.forms import CreateCourseForm, SettingsInfoCourseForm
+from course.forms import CreateCourseForm, SettingsInfoCourseForm, SettingsStudentListCourseForm
 from django.http.response import Http404
 from course.models import Course
 from lesson.models import Lesson
@@ -94,6 +94,17 @@ def course_settings(request, course_id):
         context['lessons'] = Lesson.objects.filter(course_id=course_id)
     except:
         raise Http404("Такого курса не существует")
+    #Удаление пользователя с курса
+    if request.GET.get('delete'):
+        id = request.GET['delete']
+        name_group = group_course_name(course.id)
+        group = Group.objects.get(name=name_group)
+        group.user_set.remove(User.objects.get(id=id))
+        path='/course/'+str(course_id)+'/settings'
+        return redirect(path)
+        
+
+
     if request.method == 'POST':
         if 'main_info' in request.POST:
             settings_info_course = SettingsInfoCourseForm(request.POST)
@@ -113,10 +124,14 @@ def course_settings(request, course_id):
                     fs = FileSystemStorage()
                     filename = fs.save(file.name, file)
                     course.image = file
-                course.save()
-                
+                course.save()       
         elif "add_user_to_course" in request.POST:
-            pass
+            form = SettingsStudentListCourseForm(request.POST)
+            if form.is_valid():
+                id = form.cleaned_data['id']
+                name_group = group_course_name(course.id)
+                group = Group.objects.get(name=name_group)
+                group.user_set.add(User.objects.get(id=id))
     return render(request, 'course_settings.html', context)
 
 @staff_member_required
@@ -130,6 +145,3 @@ def course_delete(request, course_id):
         raise Http404("Косяк при удаление курса")
     return redirect('/')
 
-@staff_member_required
-def course_settings_info(request, course_id):
-    pass
