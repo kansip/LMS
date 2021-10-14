@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'profiles',
     'course',
     'lesson',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'LMS_settings.urls'
@@ -142,3 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '..')
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

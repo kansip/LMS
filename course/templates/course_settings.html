@@ -13,34 +13,31 @@
         
         <div class="tabs">
                 <div id="content-1">
-                        <form action="/course/{{course.id}}/settings_info">
+                        <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}        
                                 <div class="form-group">
                                         <label for="exampleInputPassword1">Название курса</label>
-                                        <input type="text" class="form-control" id="exampleInputPassword1" value="Mark"> 
+                                        <input type="text" name="name" class="form-control" id="exampleInputPassword1" value="{{ course.name }}"> 
                                 </div>
                                 <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Описание</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">{{course.description}}</textarea>
+                                        <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{course.description}}</textarea>
                                 </div>
-                                <div class="form-group">
-                                        <label for="exampleFormControlSelect1">Преподаватель</label>
-                                        <select class="form-control" id="exampleFormControlSelect1">
-                                        {% for teacher in teachers %}
-                                                <option>{{ teacher }}</option>
-                                        {% endfor %}
-                                        </select>
-                                      </div>
                                 <div class="form-group">
                                         <label for="exampleFormControlFile1">Логотип курса</label>
                                         <input name="image" type="file" class="form-control-file">
                                 </div>
                                 <div class="form-check" style="text-align: center;">
-                                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                        <label class="form-check-label" for="exampleCheck1">Открыт</label>
+                                        {% if course.open %}
+                                                <input type="checkbox" name="open"  checked class="form-check-input" id="exampleCheck1">
+                                        {% else %}
+                                                <input type="checkbox" name="open" class="form-check-input" id="exampleCheck1">
+                                        {% endif %}
+                                        <label class="form-check-label"  for="exampleCheck1">Открыт</label>
                                 </div>
 
                                 <div style="text-align: center;">
-                                        <button type="submit"  class="btn btn-primary">Обновить</button>
+                                        <input type="submit" value="button" name="main_info" class="btn btn-primary">
                                 </div>
                         </form>            
                 </div>
@@ -53,58 +50,58 @@
                                         </div>
                                         <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="User ID">
                                       </div>
-                                <button type="submit" class="btn btn-primary mb-2">Добавить</button>
-                                <table class="table">
-                                        <thead>
-                                          <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Login</th>
-                                            <th scope="col">Имя</th>
-                                            <th scope="col">Фамилия</th>
-                                            <th scope="col">Последний вход</th>
-                                            <th scope="col">Исключить</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for stud in students %}
-                                          <tr>
-                                            <th scope="row">{{ forloop.counter }}</th>
-                                            <td><a href="/user/{{ stud.id }}">{{ stud }}</a></td>
-                                            <td>{{ stud.first_name }}</td>
-                                            <td>{{ stud.last_name }}</td>
-                                            <td>{{ stud.last_login }}</td>
-                                            <td><button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                              </button></td>
-                                          </tr>
-                                        {% endfor %}
-                                        </tbody>
-
-                                      </table>
+                                <button type="submit" name="add_user_to_course" class="btn btn-primary mb-2">Добавить</button>
                         </form>
-                </div>
-                <div id="content-3">
-                        <div style="text-align: center; margin: 30px;">
-                                <a style="color:white;" class="btn btn-primary">Добавить занятие</a>
-                        </div>
                         <table class="table">
                                 <thead>
-                                  <tr>
-                                    <th scope="col">Тема занятия</th>
-                                    <th scope="col">Дата занятия</th>
-                                    <th scope="col">Открыто</th>
-                                  </tr>
+                                        <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Login</th>
+                                        <th scope="col">Имя</th>
+                                        <th scope="col">Фамилия</th>
+                                        <th scope="col">Последний вход</th>
+                                        <th scope="col">Исключить</th>
+                                        </tr>
                                 </thead>
                                 <tbody>
-                                {% for lesson in lessons %}
-                                  <tr>
-                                    <th>{{lesson.name}}</th>
-                                    <td>{{lesson.date}}</td>
-                                    <td>Otto</td>
-                                  </tr>
+                                {% for stud in students %}
+                                        <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td><a href="/user/{{ stud.id }}">{{ stud }}</a></td>
+                                        <td>{{ stud.first_name }}</td>
+                                        <td>{{ stud.last_name }}</td>
+                                        <td>{{ stud.last_login }}</td>
+                                        <td><button type="button" class="close" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button></td>
+                                        </tr>
                                 {% endfor %}
                                 </tbody>
                         </table>
+                
+        </div>
+        <div id="content-3">
+                <div style="text-align: center; margin: 30px;">
+                        <a style="color:white;" class="btn btn-primary">Добавить занятие</a>
+                </div>
+                <table class="table">
+                        <thead>
+                                <tr>
+                                <th scope="col">Тема занятия</th>
+                                <th scope="col">Дата занятия</th>
+                                <th scope="col">Открыто</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                        {% for lesson in lessons %}
+                                <tr>
+                                <th>{{lesson.name}}</th>
+                                <td>{{lesson.date}}</td>
+                                <td>Otto</td>
+                                </tr>
+                        {% endfor %}
+                        </tbody>
+                </table>
                         
                 </div>
                 <div id="content-4">

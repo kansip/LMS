@@ -1,0 +1,13 @@
+************* Module conf
+conf.py:8:0: W0622: Redefining built-in 'copyright' (redefined-builtin)
+conf.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+conf.py:7:0: C0103: Constant name "project" doesn't conform to UPPER_CASE naming style (invalid-name)
+conf.py:8:0: C0103: Constant name "copyright" doesn't conform to UPPER_CASE naming style (invalid-name)
+conf.py:9:0: C0103: Constant name "author" doesn't conform to UPPER_CASE naming style (invalid-name)
+conf.py:10:0: C0103: Constant name "release" doesn't conform to UPPER_CASE naming style (invalid-name)
+conf.py:21:0: C0103: Constant name "language" doesn't conform to UPPER_CASE naming style (invalid-name)
+conf.py:34:0: C0103: Constant name "html_theme" doesn't conform to UPPER_CASE naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 5.00/10 (previous run: 5.00/10, +0.00)
+

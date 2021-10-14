@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+Урок
+{% endblock %}
+{% block extended_content %}
+{% autoescape off %}
+{% load filters %}
+<div class="container" style="padding-top:20px;">
+    <div class="row">
+        <div class="col-3">
+            {% include 'left_block_lesson.html' %}
+        </div>
+        <div class="col-9">
+            {%for task in tasks %}
+            <div style="background:#fafafa; width:100%;border-radius:5px;padding:10px 5px 5px 15px;">
+                <div class="row">
+                    <div class="col-10" style="font-size:18px;">{{task.name}}</div>
+                    <div class="col-1"></div>
+                    <div class="col">{% if task.correct_answer. == user_id%}{{task.cost}}{% else %}-{% endif %}/{{task.cost}}</div>
+                </div>
+                <hr>
+                <div style="padding-bottom:15px;">{{task.desc}}</div>
+                {% if task.format_flag == 0 %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="task_id" value="{{task.id}}">
+                    <input type="text" class="form-control" name="data" placeholder="Answer">
+                    <div class="text-center" style="padding-top:15px; margin-bottom:10px;">
+                        <button type="submit" class="btn btn-dark">Отправить</button>
+                    </div>
+                </form>
+                <div>
+                    {% include 'scoreboard_task.html'%}
+                </div>
+                {% elif task.format_flag == 1 %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id_delete" value="{{task.id}}">
+                    <textarea class="form-control" name="data" rows="3"></textarea>
+                    <div class="text-center" style="padding-top:15px; margin-bottom:10px;">
+                        <button type="submit" class="btn btn-dark">Отправить</button>
+                    </div>
+                </form>
+                    {% include 'scoreboard_task.html'%}
+                {% endif %}
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endautoescape %}
+{% endblock %}

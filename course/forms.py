@@ -1,5 +1,6 @@
 """ Формы, каким либо способом связанные с курсами """
 from django import forms
+from django.contrib.auth.models import Group
 
 class CreateCourseForm(forms.Form):
     """ Форма создания нового курса"""
@@ -9,8 +10,9 @@ class CreateCourseForm(forms.Form):
 
 
 class SettingsInfoCourseForm(forms.Form):
-    """ Форма создания нового курса"""
+    """ Форма изменения основоной информации курса"""
     name = forms.CharField(required=False)
     description = forms.CharField(required=False)
     image = forms.ImageField(required=False)
-    #teacher = forms.
+    #teachers = forms.ChoiceField(choices = [(user.id, user.username) for user in Group.objects.get(name="teachers").user_set.all()],required=False)
+    open = forms.BooleanField(required=False)

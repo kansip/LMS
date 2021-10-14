@@ -90,16 +90,23 @@ def login_view(request):
 
 @login_required
 def main_page_view(request):
+    """ Главная страница """
     context = {'menu': get_context_menu(request, HOME_PAGE_NAME)}
     return render(request, 'index.html', context)
 
 @login_required
 def logout_view(request):
+    """ Выход из аккаунта"""
     logout(request)
     return redirect('/')
 
 @login_required
 def user_page_view(request, user_id):
+    """ Личный кабинет пользователя
+        Видно только самому пользователю и сотрудникам
+        :param user_id: - Уникальный номер получаемого пользователя
+    
+    """
     context = {'menu': get_context_menu(request, USER_PAGE_NAME)}
     try:
         user = User.objects.get(id=user_id)

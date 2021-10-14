@@ -1,0 +1,83 @@
+ <a href="/course/{{course.id}}" class="btn btn-light col" style="color:black;margin-bottom:10px;">Назад в
+     курс</a>
+ {% if user.is_staff %} 
+  <a href="/course/{{course.id}}" class="btn btn-light col" style="color:black;margin-bottom:10px;">Редактирование
+      урока</a>
+ {% endif %}
+<div style="height:220px; border:1px solid black; padding-top:10px; padding:15px; border-radius:10px;">
+    <div style="border-radius:100%;background:grey;height:50px;width:50px;"></div>
+    <div style="margin-top:-50px;margin-left:70px;font-size:13px;">Преподаватель
+        <div style="font-size:20px;">{{lesson.teacher}}</div>
+    </div>
+    <div style="margin-top:20px;"><small>Тема: </small>{{lesson.name}}</div>
+</div>
+{%for block in blocks %}
+{% if block.local == 1 %}
+<div style="border:1px solid #AFEEEE; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
+    <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}">
+        <div
+                style="background:#ADD8E6;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
+            <div style="border-radius:100%;background:#447f91;width:10px;height:10px;margin-top:10px;"></div>
+            <div style="margin-top:-17px;margin-left:20px;color:#447f91;">{{block.name}}</div>
+        </div>
+    </a>
+    <div style="margin:10px;">
+        <ol style="margin-left:-10px;">
+        {%for task in block.tasks.all%}
+            <li>{{task.name}}</li>
+        {% endfor %}
+        </ol>
+    </div>
+</div>
+{% elif block.local == 0 %}
+<div style="border:1px solid #a8ffc1; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
+    <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}">
+        <div
+                style="background:#90EE90;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
+            <div style="border-radius:100%;background:#4a7857;width:10px;height:10px;margin-top:10px;"></div>
+            <div style="margin-top:-17px;margin-left:20px;color:#4a7857;">{{block.name}}</div>
+        </div>
+    </a>
+    <div style="margin:10px;">
+        <ol style="margin-left:-10px;">
+        {%for task in block.tasks.all%}
+          <li>{{task.name}}</li>
+        {% endfor %}
+        </ol>
+    </div>
+</div>
+{% elif block.local == 2 %}
+<div style="border:1px solid #f7dc97; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
+    <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}">
+        <div style="background:#f7dc97;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
+            <div style="border-radius:100%;background:#917c44;width:10px;height:10px;margin-top:10px;"></div>
+            <div style="margin-top:-17px;margin-left:20px;color:#917c44;">{{block.name}}</div>
+        </div>
+    </a>
+    <div style="margin:10px;">
+        <ol style="margin-left:-10px;">
+        {%for task in block.tasks.all%}
+          <li>{{task.name}}</li>
+        {% endfor %}
+        </ol>
+    </div>
+</div>
+ {% elif block.local == 3 %}
+<div style="border:1px solid #f7dc97; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
+    <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}">
+        <div
+                style="background:#FFC0CB;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
+            <div style="border-radius:100%;background:#A60000;width:10px;height:10px;margin-top:10px;"></div>
+            <div style="margin-top:-17px;margin-left:20px;color:#A60000;">{{block.name}}</div>
+        </div>
+    </a>
+    <div style="margin:10px;">
+        <ol style="margin-left:-10px;">
+        {%for task in block.tasks.all%}
+          <li>{{task.name}}</li>
+        {% endfor %}
+        </ol>
+    </div>
+</div>
+{% endif %}
+{% endfor %}

@@ -1,4 +1,5 @@
-from course.forms import CreateCourseForm
+from unittest import signals
+from course.forms import CreateCourseForm, SettingsInfoCourseForm
 from django.http.response import Http404
 from course.models import Course
 from lesson.models import Lesson
@@ -54,14 +55,14 @@ def course_create(request):
     context = {'menu': get_context_menu(request, COURSE_CREATE_NAME)} 
     if request.method == 'POST':
         create_course_form = CreateCourseForm(request.POST)
-        print(create_course_form.is_valid())
+        #print(create_course_form.is_valid())
         if create_course_form.is_valid():
             # получение данных из формы
             name_date = create_course_form.cleaned_data['name']
             description_date = create_course_form.cleaned_data['description']
             image_date = request.FILES['image']
 
-            # сохраняем на картинку файловой системе
+            # сохраняем картинку на файловой системе
             fs = FileSystemStorage()
             filename = fs.save(image_date.name, image_date)
 
@@ -86,12 +87,36 @@ def course_teaching_list(request):
 def course_settings(request, course_id):
     context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
     try:
-        context["course"]=Course.objects.get(id=course_id)
-        context["teachers"]=Group.objects.get(name="teachers").user_set.all()
-        context["students"]=Course.objects.get(id=course_id).students.user_set.all()
-        context['lessons']=Lesson.objects.filter(course_id=course_id)
+        course = Course.objects.get(id=course_id)
+        context["course"] = course
+        context["teachers"] = Group.objects.get(name="teachers").user_set.all()
+        context["students"] = Course.objects.get(id=course_id).students.user_set.all()
+        context['lessons'] = Lesson.objects.filter(course_id=course_id)
     except:
         raise Http404("Такого курса не существует")
+    if request.method == 'POST':
+        if 'main_info' in request.POST:
+            settings_info_course = SettingsInfoCourseForm(request.POST)
+            if settings_info_course.is_valid():
+                name = settings_info_course.cleaned_data['name']
+                description = settings_info_course.cleaned_data['description']
+                open = settings_info_course.cleaned_data['open']
+                course.name = name
+                course.description = description
+                if 'open' in request.POST:
+                    course.open = True
+                else:
+                    course.open = False
+                if  'image' in request.FILES:
+                    # сохраняем на картинку файловой системе
+                    file = request.FILES['image']
+                    fs = FileSystemStorage()
+                    filename = fs.save(file.name, file)
+                    course.image = file
+                course.save()
+                
+        elif "add_user_to_course" in request.POST:
+            pass
     return render(request, 'course_settings.html', context)
 
 @staff_member_required
