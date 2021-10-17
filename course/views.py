@@ -1,4 +1,3 @@
-from unittest import signals
 from course.forms import CreateCourseForm, SettingsInfoCourseForm, SettingsStudentListCourseForm
 from django.http.response import Http404
 from course.models import Course
@@ -86,6 +85,11 @@ def course_teaching_list(request):
 
 @staff_member_required
 def course_settings(request, course_id):
+    """ 
+    Настройки курса: добавление и удаление занятий, 
+    добавление и удаление учеников,
+    а так же изменение основной информации
+    """
     context = {'menu': get_context_menu(request, COURSE_TEACHING_NAME)}
     try:
         course = Course.objects.get(id=course_id)
