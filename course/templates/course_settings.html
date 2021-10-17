@@ -71,7 +71,7 @@
                                         <td>{{ stud.first_name }}</td>
                                         <td>{{ stud.last_name }}</td>
                                         <td>{{ stud.last_login }}</td>
-                                        <td><form method="GET"><button value="{{ stud.id }}" name="delete" class="close" aria-label="Close">
+                                        <td><form method="GET"><button value="{{ stud.id }}" name="delete_student" class="close" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button></form></td>
                                         </tr>
@@ -81,10 +81,11 @@
                 
         </div>
         <div id="content-3">
-                <div style="text-align: center; margin: 30px;">
-                        <a style="color:white;" class="btn btn-primary">Добавить занятие</a>
-                </div>
-                <table class="table">
+                <form method="POST" style="text-align: center; margin: 30px;">
+                        {% csrf_token %}
+                        <input style="color:white;"type="submit"  class="btn btn-primary" name="add_lesson" value="Добавить занятие">
+                </from>  
+                <table class="table" style="margin-top: 20px;">
                         <thead>
                                 <tr>
                                 <th scope="col">Тема занятия</th>
@@ -97,7 +98,10 @@
                                 <tr>
                                 <th>{{lesson.name}}</th>
                                 <td>{{lesson.date}}</td>
-                                <td>Otto</td>
+                                <td>{{lesson.open}}</td>
+                                <td><form method="GET"><button value="{{ lesson.id }}" name="delete_lesson" class="close" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button></form></td>
                                 </tr>
                         {% endfor %}
                         </tbody>

@@ -11,6 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from LMS_settings.menu import get_context_menu, HOME_PAGE_NAME,COURSE_CREATE_NAME,COURSE_STUDY_NAME,COURSE_TEACHING_NAME
 from django.core.files.storage import FileSystemStorage
 from course.utils import group_course_name
+from django.utils import  timezone
 # Create your views here.
 
 @login_required
@@ -95,16 +96,24 @@ def course_settings(request, course_id):
     except:
         raise Http404("Такого курса не существует")
     #Удаление пользователя с курса
-    if request.GET.get('delete'):
-        id = request.GET['delete']
+    if request.GET.get('delete_student'):
+        id = request.GET['delete_student']
         name_group = group_course_name(course.id)
         group = Group.objects.get(name=name_group)
         group.user_set.remove(User.objects.get(id=id))
         path='/course/'+str(course_id)+'/settings'
         return redirect(path)
-        
 
-
+    #Удаление урока курса
+    if request.GET.get('delete_lesson'):
+        id =request.GET['delete_lesson']
+        try:
+            lesson=Lesson.objects.get(id=id).delete()
+            path='/course/'+str(course_id)+'/settings'
+            return redirect(path)
+        except Lesson.DoesNotExist:
+            raise Http404("No Lesson matches the given query.")
+    #Обработка форм
     if request.method == 'POST':
         if 'main_info' in request.POST:
             settings_info_course = SettingsInfoCourseForm(request.POST)
@@ -131,7 +140,17 @@ def course_settings(request, course_id):
                 id = form.cleaned_data['id']
                 name_group = group_course_name(course.id)
                 group = Group.objects.get(name=name_group)
-                group.user_set.add(User.objects.get(id=id))
+                try:
+                    user = User.objects.get(id=id)
+                except User.DoesNotExist:
+                    raise Http404("No User matches the given query.")
+                group.user_set.add(user)
+        elif "add_lesson" in request.POST:
+            lesson=Lesson.objects.create(course_id=course_id,
+                                        teacher=course.teacher, 
+                                        name=str(hash(request.POST["csrfmiddlewaretoken"][::10])),
+                                        date=None)
+            lesson.save()
     return render(request, 'course_settings.html', context)
 
 @staff_member_required

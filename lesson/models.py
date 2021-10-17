@@ -10,7 +10,7 @@ class Lesson(models.Model):
         on_delete=models.CASCADE,
     )
     #blocks = models.ManyToManyField(TaskGroup)
-    teacher = models.OneToOneField(User, on_delete=SET_NULL,null=True)
+    teacher = models.ForeignKey(User, on_delete=SET_NULL,null=True)
     name = models.CharField(max_length=30)
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=True)
     open = models.BooleanField(default=False)
