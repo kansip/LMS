@@ -18,5 +18,5 @@ from lesson.views import *
 
 urlpatterns = [
     path('<int:lesson_id>', lesson_view),
-
+    path('<int:lesson_id>/settings', settings),
 ]
