@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'profiles',
     'course',
     'lesson',
+    'tasks',
     'debug_toolbar',
 ]
 
