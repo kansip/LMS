@@ -19,4 +19,5 @@ from lesson.views import *
 urlpatterns = [
     path('<int:lesson_id>', lesson_view),
     path('<int:lesson_id>/settings', settings),
+    path('<int:lesson_id>/<int:block_id>/delete_block', delete_block),
 ]

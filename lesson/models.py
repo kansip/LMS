@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import SET_NULL
 from course.models import Course
+from tasks.models import TaskGroup
 # Create your models here.
 
 class Lesson(models.Model):
@@ -14,3 +15,4 @@ class Lesson(models.Model):
     name = models.CharField(max_length=30)
     date = models.DateTimeField(null=True)
     open = models.BooleanField(default=False)
+    blocks = models.ManyToManyField(TaskGroup)

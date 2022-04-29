@@ -17,7 +17,6 @@ class Task(models.Model):
     name = models.CharField(max_length = 120)
     desc = models.TextField()
     cost = models.IntegerField()
-    category = models.CharField(max_length = 20)
     files = models.ManyToManyField(TaskFiles)
     revizion_format_flag = models.BooleanField(default = 0)
 
@@ -29,10 +28,9 @@ class TaskTrueAnswers(models.Model):
 
 class TaskGroup(models.Model):
     name = models.CharField(max_length = 100)
-    author = models.ForeignKey(User, null = True, on_delete = models.SET_NULL)
-    local = models.IntegerField()
-    data_open = models.DateTimeField()
-    data_part_close = models.DateTimeField()
-    data_close = models.DateTimeField()
-    open = models.BooleanField()
+    local = models.IntegerField(default=1)
+    data_open = models.DateTimeField(null=True)
+    data_part_close = models.DateTimeField(null=True)
+    data_close = models.DateTimeField(null=True)
+    open = models.BooleanField(default=0)
     tasks = models.ManyToManyField(Task)
