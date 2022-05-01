@@ -2,11 +2,20 @@
     курс</a>
 <a href="/course/{{course.id}}/{{lesson.id}}" class="btn btn-light col" style="color:black;margin-bottom:10px;">Назад к уроку</a>
 <div style="height:220px; border:1px solid black; padding-top:10px; padding:15px; border-radius:10px;">
+  <div style="text-align: right; margin-top: 20px;">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#settingModal">
+      &#9881;
+    </button>
+ </div> 
    <div style="border-radius:100%;background:grey;height:50px;width:50px;"></div>
-   <div style="margin-top:-50px;margin-left:70px;font-size:13px;">Преподаватель
+   <div></div>
+   <div style="margin-top:-50px;margin-left:70px;font-size:13px;">Преподаватель	
        <div style="font-size:20px;">{{lesson.teacher}}</div>
    </div>
-   <div style="margin-top:20px;"><small>Тема: </small>{{lesson.name}}</div>
+   <div style="margin-top:20px;"><small>Тема: </small>{{lesson.name}} 
+    <div><small>Дата: </small>{{lesson.date}}</div>
+  </div>
+
 </div>
 {%for block in blocks %}
 {% if block.local == 1 %}
@@ -88,7 +97,7 @@
        Добавить блок
    </button>
 </div>  
- <!-- Modal -->
+ <!-- Modal added block tasks-->
  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
      <div class="modal-content">
@@ -122,3 +131,48 @@
    </div>
  </div>
  
+
+<!-- Modal change information for lesson-->
+ <div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить блок</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+            Преподаватель
+            <select required class="form-select" name="id-teacher-lesson" aria-label="Default select example">
+              <option value="{{lesson.teacher.id}}">{{lesson.teacher}}</option>
+              {% for teacher in teachers%}
+                <option value="{{teacher.id}}">{{teacher}}</option>
+              {% endfor %}
+            </select>
+            <div  class="form-group">
+              <label for="recipient-name" class="col-form-label">Название:</label>
+              <input type="text" name="name-lesson" class="form-control" id="recipient-name" value="{{lesson.name}}">
+            </div>
+            <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Дата:</label>
+            <input id="datetime" name="date" type="datetime-local" value="{{lesson.date}}">
+          </div>
+          <div class="form-check">
+            {% if lesson.open %}
+                    <input type="checkbox" name="open"  checked class="form-check-input" id="exampleCheck1">
+            {% else %}
+                    <input type="checkbox" name="open" class="form-check-input" id="exampleCheck1">
+            {% endif %}
+            <label class="form-check-label"  for="exampleCheck1">Открыт</label>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="submit"  class="btn btn-primary" name="Settings-lesson">Добавить</button>
+      </div>
+    </div>
+  </div>
+</div>

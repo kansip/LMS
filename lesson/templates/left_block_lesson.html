@@ -9,7 +9,9 @@
     <div style="margin-top:-50px;margin-left:70px;font-size:13px;">Преподаватель
         <div style="font-size:20px;">{{lesson.teacher}}</div>
     </div>
-    <div style="margin-top:20px;"><small>Тема: </small>{{lesson.name}}</div>
+    <div style="margin-top:20px;"><small>Тема: </small>{{lesson.name}} 
+        <div><small>Дата: </small>{{lesson.date}}</div>
+      </div>
 </div>
 {%for block in blocks %}
 {% if block.local == 1 %}
