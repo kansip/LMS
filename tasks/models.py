@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -9,7 +10,7 @@ class TaskFiles(models.Model):
 class TaskAnswers(models.Model):
     answer = models.TextField()
     user = models.ForeignKey(User, null = True, on_delete = models.SET_NULL)
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now_add=True)
     score = models.IntegerField()
     revizion = models.BooleanField(default = 0)
 
@@ -29,8 +30,8 @@ class TaskTrueAnswers(models.Model):
 class TaskGroup(models.Model):
     name = models.CharField(max_length = 100)
     local = models.IntegerField(default=1)
-    data_open = models.DateTimeField(null=True)
-    data_part_close = models.DateTimeField(null=True)
-    data_close = models.DateTimeField(null=True)
+    date_open = models.DateTimeField(null=True)
+    date_part_close = models.DateTimeField(null=True)
+    date_close = models.DateTimeField(null=True)
     open = models.BooleanField(default=0)
     tasks = models.ManyToManyField(Task)

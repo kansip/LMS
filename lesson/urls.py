@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path
 from lesson.views import *
 
+
+
 urlpatterns = [
     path('<int:lesson_id>', lesson_view),
     path('<int:lesson_id>/settings', settings),
