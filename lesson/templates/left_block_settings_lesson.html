@@ -26,7 +26,12 @@
            <div style="border-radius:100%;background:#447f91;width:10px;height:10px;margin-top:10px;"></div>
            <div style="margin-top:-17px;margin-left:20px;color:#447f91;">{{block.name}}</div>
            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+            &#9881;
+          </button>
        </div>
+       
+       
    </a>
    <div style="margin:10px;">
        <ol style="margin-left:-10px;">
@@ -35,6 +40,7 @@
        {% endfor %}
        </ol>
    </div>
+   <a style="padding-left:10px;font-size:12px;color:#447f91;" href="#">Создать задачу</a>
 </div>
 {% elif block.local == 0 %}
 <div style="border:1px solid #a8ffc1; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
@@ -44,6 +50,9 @@
            <div style="border-radius:100%;background:#4a7857;width:10px;height:10px;margin-top:10px;"></div>
            <div style="margin-top:-17px;margin-left:20px;color:#4a7857;">{{block.name}}</div>
            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+            &#9881;
+          </button>
        </div>
    </a>
    <div style="margin:10px;">
@@ -61,6 +70,9 @@
            <div style="border-radius:100%;background:#917c44;width:10px;height:10px;margin-top:10px;"></div>
            <div style="margin-top:-17px;margin-left:20px;color:#917c44;">{{block.name}}</div>
            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+            &#9881;
+          </button>
        </div>
    </a>
    <div style="margin:10px;">
@@ -79,6 +91,9 @@
            <div style="border-radius:100%;background:#A60000;width:10px;height:10px;margin-top:10px;"></div>
            <div style="margin-top:-17px;margin-left:20px;color:#A60000;">{{block.name}}</div>
            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+            &#9881;
+          </button>
        </div>
    </a>
    <div style="margin:10px;">
@@ -137,7 +152,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Добавить блок</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Настройки урока</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -174,5 +189,75 @@
         <button type="submit"  class="btn btn-primary" name="Settings-lesson">Добавить</button>
       </div>
     </div>
+  </form>
   </div>
 </div>
+
+
+<!-- Modal change information for block-->
+{% for block in blocks %}
+<div class="modal fade" id="block-setting-Modal{{ block.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Настройки блока</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="block_id" value="{{block.id}}">
+          <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Название:</label>
+            <input type="text" name="name-block" class="form-control" id="recipient-name" value="{{block.name}}">
+          </div>
+          <label for="recipient-name" class="col-form-label">Тип блока</label>
+           <select required class="form-select" name="type-block" aria-label="Default select example">
+             {%if block.local == 0 %}
+             <option value="0">Домашняя работа</option>
+             {% elif block.local == 1 %}
+              <option value="1">Классная работа</option>
+             {% elif block.local == 2 %}
+             <option value="2">Материал</option>
+             {% else %}
+             <option value="3">Контрольная работа</option>
+             {% endif %}
+               <option value="1">Классная работа</option>
+               <option value="0">Домашняя работа</option>
+               <option value="3">Контрольная работа</option>
+               <option value="2">Материал</option>
+             </select>
+          <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Дата старта:</label>
+            <input id="datetime" name="date_open" type="datetime-local" value="{{block.date_open}}"><br>{{block.date_open}}
+          </div>
+          <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Конец работы:</label>
+            <input id="datetime" name="date_part_close" type="datetime-local" value="{{block.date_part_close}}"><br>{{block.date_part_close}}
+          </div>
+          <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Дорешка:</label>
+            <input id="datetime" name="date_close" type="datetime-local" value="{{block.date_close}}"><br>{{block.date_close}}
+          </div>
+          <div class="form-check">
+            {% if block.open %}
+                    <input type="checkbox" name="open"  checked class="form-check-input" id="exampleCheck1">
+            {% else %}
+                    <input type="checkbox" name="open" class="form-check-input" id="exampleCheck1">
+            {% endif %}
+            <label class="form-check-label"  for="exampleCheck1">Открыт</label>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="submit"  class="btn btn-primary" name="Settings-Block">Добавить</button>
+      </div>
+    </form>
+    </div>
+
+  </div>
+</div>
+{%endfor%}

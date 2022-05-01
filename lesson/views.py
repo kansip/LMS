@@ -56,6 +56,27 @@ def settings(request, course_id, lesson_id):
             if date != '':
                 lesson.date=date
             lesson.save()
+        elif 'Settings-Block' in request.POST:
+            block_id=int(request.POST['block_id'])
+            name_block = request.POST['name-block']
+            type_block = request.POST['type-block']
+            date_open = request.POST['date_open']
+            date_part_close = request.POST['date_part_close']
+            date_close = request.POST['date_close']
+            task_group = TaskGroup.objects.get(id=block_id)
+            if 'open' in request.POST:
+                task_group.open = True
+            else:
+                task_group.open = False
+            task_group.name = name_block
+            task_group.local = type_block
+            if date_open != '':
+                task_group.date_open = date_open
+            if date_part_close != '':
+                task_group.date_part_close = date_part_close
+            if date_close != '':
+                task_group.date_close=date_close
+            task_group.save()
     return render(request,'lesson_setting.html',context)
 
 @staff_member_required
