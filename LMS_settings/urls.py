@@ -23,8 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('profiles.urls')),
     path('course/',include('course.urls')),
-    path('course/<int:course_id>/', include('lesson.urls'))
-    
+    path('course/<int:course_id>/', include('lesson.urls')),
+    path('course/<int:course_id>/', include('tasks.urls'))
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

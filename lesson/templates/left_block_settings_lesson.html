@@ -21,8 +21,7 @@
 {% if block.local == 1 %}
 <div style="border:1px solid #AFEEEE; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
    <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}">
-       <div
-               style="background:#ADD8E6;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
+       <div style="background:#ADD8E6;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
            <div style="border-radius:100%;background:#447f91;width:10px;height:10px;margin-top:10px;"></div>
            <div style="margin-top:-17px;margin-left:20px;color:#447f91;">{{block.name}}</div>
            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
@@ -40,7 +39,7 @@
        {% endfor %}
        </ol>
    </div>
-   <a style="padding-left:10px;font-size:12px;color:#447f91;" href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/create_task">Создать задачу</a>
+   <button style="padding-left:10px;font-size:12px;color:#447f91;" data-toggle="modal" data-target="#added-task-Modal{{ block.id }}">Создать задачу</button>
 </div>
 {% elif block.local == 0 %}
 <div style="border:1px solid #a8ffc1; margin-top:30px; border-radius:10px;padding-bottom:20px;background:#fafafa;">
@@ -254,6 +253,66 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
         <button type="submit"  class="btn btn-primary" name="Settings-Block">Добавить</button>
+      </div>
+    </form>
+    </div>
+
+  </div>
+</div>
+{%endfor%}
+
+
+<!-- Modal added tasks-->
+{% for block in blocks %}
+<div class="modal fade" id="added-task-Modal{{ block.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Создать задачу</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="block_id" value="{{block.id}}">
+          <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Название:</label>
+            <input type="text" name="name-block" class="form-control" id="recipient-name">
+          </div>
+          <div  class="form-group">
+            <label for="recipient-name" class="col-form-label">Стоимость:</label>
+            <input type="text" name="name-block" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Описание</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+          <div class="form-check">
+            {% if block.open %}
+                    <input type="checkbox" name="open"  checked class="form-check-input" id="exampleCheck1">
+            {% else %}
+                    <input type="checkbox" name="open" class="form-check-input" id="exampleCheck1">
+            {% endif %}
+            <label class="form-check-label"  for="exampleCheck1">Ручная проверка</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+            <label class="form-check-label" for="exampleRadios1">
+              Численный ответ
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+            <label class="form-check-label" for="exampleRadios2">
+              Текст или файл
+            </label>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="submit"  class="btn btn-primary" name="Added-Task">Добавить</button>
       </div>
     </form>
     </div>

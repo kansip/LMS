@@ -82,8 +82,8 @@ def settings(request, course_id, lesson_id):
 @staff_member_required
 def delete_block(request, course_id, lesson_id,block_id):
     context = {'menu': get_context_menu(request, HOME_PAGE_NAME)} #заменить
-    TaskGroup.objects.get(id=block_id).delete()
     try:
+        TaskGroup.objects.get(id=block_id).delete()
         context['lesson']=Lesson.objects.get(id=lesson_id)
         context['course']=Course.objects.get(id=course_id)
         context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
