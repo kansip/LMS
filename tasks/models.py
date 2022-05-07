@@ -1,14 +1,14 @@
 from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import User
-
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class TaskFiles(models.Model):
     files = models.FileField(upload_to = 'uploads/')
 
 class Task(models.Model):
     name = models.CharField(max_length = 120)
-    desc = models.TextField()
+    desc = RichTextUploadingField(blank=True, null=True)
     cost = models.IntegerField()
     files = models.ManyToManyField(TaskFiles)
     revizion_format_flag = models.BooleanField(default = 0)

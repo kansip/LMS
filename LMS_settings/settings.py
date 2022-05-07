@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'lesson',
     'tasks',
     'debug_toolbar',
+    'ckeditor',
+    'ckeditor_uploader',    
 ]
 
 MIDDLEWARE = [
@@ -123,12 +125,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
 
 # Основной url для управления медиафайлами
@@ -149,3 +148,7 @@ PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '..')
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_URL = 'static/'

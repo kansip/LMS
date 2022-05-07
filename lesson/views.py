@@ -5,7 +5,7 @@ from tasks.models import TaskGroup
 from django.contrib.auth.models import Group, User
 from lesson.models import Lesson
 from course.models import Course
-from lesson.forms import AddBlockForm
+from tasks.form import TaskForms
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from LMS_settings.menu import get_context_menu, HOME_PAGE_NAME
@@ -23,6 +23,7 @@ def lesson_view(request, course_id, lesson_id):
         context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
     except:
         raise Http404("Такого занятия нет")
+    
     return render(request,'lesson.html',context)
 
 @staff_member_required
@@ -77,6 +78,7 @@ def settings(request, course_id, lesson_id):
             if date_close != '':
                 task_group.date_close=date_close
             task_group.save()
+    context['myform'] = TaskForms()
     return render(request,'lesson_setting.html',context)
 
 @staff_member_required

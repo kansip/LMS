@@ -15,4 +15,5 @@ def create_task(request, course_id, lesson_id, block_id):
         context['blocks']=TaskGroup.objects.get(id=block_id)
     except:
         raise Http404("Такого занятия нет")
+    
     return render(request,'lesson.html',context)
