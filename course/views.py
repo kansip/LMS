@@ -167,4 +167,3 @@ def course_delete(request, course_id):
     except:
         raise Http404("Косяк при удаление курса")
     return redirect('/')
-

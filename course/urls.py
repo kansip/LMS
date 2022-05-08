@@ -23,5 +23,5 @@ urlpatterns = [
     path('<int:course_id>/delete', course_delete),
     path('study', course_study_list),
     path('teaching', course_teaching_list),
-    path('create',course_create)
+    path('create',course_create),
 ]
