@@ -4,11 +4,13 @@ from typing import TYPE_CHECKING
 from tasks.models import TaskGroup
 from django.contrib.auth.models import Group, User
 from lesson.models import Lesson
+from lesson.tasks import open_lesson
 from course.models import Course
 from tasks.form import TaskForms
 from django.http.response import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from LMS_settings.menu import get_context_menu, HOME_PAGE_NAME
+from LMS_settings.celery import app
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
@@ -56,6 +58,7 @@ def settings(request, course_id, lesson_id):
             lesson.name = name_lesson
             if date != '':
                 lesson.date=date
+                open_lesson.apply_async((lesson_id,), eta=date)
             lesson.save()
         elif 'Settings-Block' in request.POST:
             block_id=int(request.POST['block_id'])
