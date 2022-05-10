@@ -14,6 +14,7 @@ class Task(models.Model):
     revizion_format_flag = models.BooleanField(default = 0)
     integer_format_flag = models.BooleanField(default = 1)
     text_format_flag = models.BooleanField(default = 0)
+    number_of_attempts = models.IntegerField(default=100)
 
 class TaskAnswers(models.Model):
     answer = models.TextField()
