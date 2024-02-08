@@ -1,7 +1,10 @@
 from ctypes import resize
+from itertools import chain
 import re
+import datetime
 from typing import TYPE_CHECKING
-from tasks.models import TaskGroup
+from tasks.models import TaskGroup, Task, TaskTrueAnswers,TaskAnswers
+from tasks.checker import *
 from django.contrib.auth.models import Group, User
 from lesson.models import Lesson
 from lesson.tasks import open_lesson
@@ -25,7 +28,43 @@ def lesson_view(request, course_id, lesson_id):
         context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
     except:
         raise Http404("Такого занятия нет")
-    
+    if len(Lesson.objects.get(id=lesson_id).blocks.all())==0:
+        return render(request,'lesson.html',context)
+    else:
+        path="/course/"+str(course_id)+'/'+str(lesson_id)+"/"+str(Lesson.objects.get(id=lesson_id).blocks.all()[0].id)
+        return redirect(path)
+
+@login_required
+def block_view(request, course_id, lesson_id,block_id):
+    """ Просмотр определенного занятия"""
+    context = {'menu': get_context_menu(request, HOME_PAGE_NAME)} #заменить3
+    try:
+        context['lesson']=Lesson.objects.get(id=lesson_id)
+        context['course']=Course.objects.get(id=course_id)
+        context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
+       # context['Tasks']=TaskGroup.objects.get(id=block_id).tasks.all()
+    except:
+        raise Http404("Такого занятия нет")
+    if request.method == 'POST':
+        answer=request.POST['answer']
+        task_id=request.POST['task_id']
+        task=Task.objects.get(id=task_id)
+        score=check(answer,task)
+        TaskAnswers.objects.create(answer=answer,user=request.user,time=datetime.datetime.now(),score=score,task=task)
+    tasks=TaskGroup.objects.get(id=block_id).tasks.all()
+    print(tasks)
+    final_score=list()
+    for i in range(len(tasks)):
+        ans_task_user=TaskAnswers.objects.filter(task=tasks[i]).filter(user=request.user)
+        pref_list=list()
+        if len(ans_task_user)!=0:
+            for j in range(len(ans_task_user)):
+                pref_list.append(int(ans_task_user[j].score))
+            final_score.append([tasks[i], max(pref_list)])
+        else:
+            final_score.append([tasks[i], 0])
+    context['Tasks']=final_score
+    print(final_score)
     return render(request,'lesson.html',context)
 
 @staff_member_required
@@ -81,6 +120,26 @@ def settings(request, course_id, lesson_id):
             if date_close != '':
                 task_group.date_close=date_close
             task_group.save()
+        elif 'Added-Task' in request.POST:
+                name_task = request.POST['name-task']
+                cost_task = request.POST['cost-task']
+                desc_task = request.POST['desc-task']
+                radio_file_flag = request.POST['radio']
+                answer = request.POST['answer']
+                if 'rev_task' in request.POST:
+                    rev_task = True
+                else:
+                    rev_task = False
+                task = 0
+                if radio_file_flag == 'text':
+                    task = Task.objects.create(name=name_task,cost=cost_task,desc=desc_task,revizion_format_flag=rev_task,file_format_flag=False,text_format_flag=True)
+                    task.save()
+                else:
+                    task = Task.objects.create(name=name_task,cost=cost_task,desc=desc_task,revizion_format_flag=rev_task,file_format_flag=True,text_format_flag=False)
+                    task.save()
+                task_group = TaskGroup.objects.get(id=int(request.POST['block_id']))
+                task_group.tasks.add(task)
+                TaskTrueAnswers.objects.create(true_flags=answer,task_id=task)
     context['myform'] = TaskForms()
     return render(request,'lesson_setting.html',context)
 

@@ -9,8 +9,27 @@
             {% include 'left_block_lesson.html' %}
             </div>
             <div class="col-9">
-                <div style="text-align:center;margin-top:50px;font-size:30px;">Пока пусто</div>
-                
+                <div style="margin:10px;">
+                    {% for task, score in Tasks %}
+                      <div class="card">
+                        <h5 class="card-header">{{task.name}}<div style="text-align: right;margin-top: -25px;">{{score}}/{{task.cost}}</div></h5>
+                        <div class="card-body">
+                          <h5 class="card-title">{{task.desc}}</h5>
+                        </div>
+                        <form class="row g-3" method="POST">
+                            {% csrf_token %}
+                            <div class="col-auto" style="margin-left: 30px;">
+                              <input type="answer" name="answer" class="form-control" id="inputPassword2" placeholder="Password">
+                              <input type="hidden" name="task_id" class="form-control" id="inputPassword2" value="{{task.id}}">
+                            </div>
+                            <div class="col-auto">
+                              <button type="submit" class="btn btn-primary mb-3">Отправить</button>
+                            </div>
+                          </form>
+                      </div>
+                      <hr>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

@@ -12,8 +12,9 @@
         <br>
         <a href="/course/{{course.id}}" style="color:black;font-size:23px;margin-left:350px;">{{course.name}}</a><br>
         <div href="/course/{{course.id}}" style="color:black;font-size:17px;margin-left:350px;">{{course.teacher}}</div>
+        {% if course.image %}
         <img style="border-radius: 100%;width: 200px;height: 200px;" src="{{ course.image.url }}">
-
+        {% endif %}
     </div><hr>
     {% endfor %}
 </div>

@@ -37,7 +37,7 @@
                                 </div>
 
                                 <div style="text-align: center;">
-                                        <input type="submit" value="button" name="main_info" class="btn btn-primary">
+                                        <input type="submit" value="Сохранить" name="main_info" class="btn btn-primary">
                                 </div>
                         </form>            
                 </div>
@@ -96,7 +96,7 @@
                         <tbody>
                         {% for lesson in lessons %}
                                 <tr>
-                                <th>{{lesson.name}}</th>
+                                <th><a href="/course/{{course.id}}/{{lesson.id}}">{{lesson.name}}</a></th>
                                 <td>{{lesson.date}}</td>
                                 <td>{{lesson.open}}</td>
                                 <td><form method="GET"><button value="{{ lesson.id }}" name="delete_lesson" class="close" aria-label="Close">
@@ -113,9 +113,6 @@
                 </div>
         
                 <div class="tabs__links">
-                <a href="#content-1"> Основная информация</a>
-                <a href="#content-2">Ученики</a>
-                <a href="#content-3">Занятия</a>
                 <a style="color: red;" href="/course/{{course.id}}/delete">Удалить курс</a>
                 </div>
         </div>

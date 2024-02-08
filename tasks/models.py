@@ -12,8 +12,8 @@ class Task(models.Model):
     cost = models.IntegerField()
     files = models.ManyToManyField(TaskFiles)
     revizion_format_flag = models.BooleanField(default = 0)
-    integer_format_flag = models.BooleanField(default = 1)
-    text_format_flag = models.BooleanField(default = 0)
+    file_format_flag = models.BooleanField(default = 0)
+    text_format_flag = models.BooleanField(default = 1)
     number_of_attempts = models.IntegerField(default=100)
 
 class TaskAnswers(models.Model):
