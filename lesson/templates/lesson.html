@@ -6,16 +6,26 @@
     <div class="container" style="padding-top:20px;">
         <div class="row">
             <div class="col-3">
+            {%if staff == 1 %}
+            {% include 'teacher_left_block_lesson.html' %}
+            {% else %}
             {% include 'left_block_lesson.html' %}
+            {% endif %}
             </div>
             <div class="col-9">
                 <div style="margin:10px;">
                     {% for task, score in Tasks %}
                       <div class="card">
-                        <h5 class="card-header">{{task.name}}<div style="text-align: right;margin-top: -25px;">{{score}}/{{task.cost}}</div></h5>
+                        
+                        <h5 class="card-header">{{task.name}}
+                          {% if task.text_format_flag == 1 or task.file_format_flag == 1 %}
+                          <div style="text-align: right;margin-top: -25px;">{{score}}/{{task.cost}}</div>
+                          {% endif %}
+                        </h5>
                         <div class="card-body">
                           <h5 class="card-title">{{task.desc}}</h5>
                         </div>
+                        {% if task.text_format_flag == 1 %}
                         <form class="row g-3" method="POST">
                             {% csrf_token %}
                             <div class="col-auto" style="margin-left: 30px;">
@@ -26,6 +36,20 @@
                               <button type="submit" class="btn btn-primary mb-3">Отправить</button>
                             </div>
                           </form>
+                          {% elif task.file_format_flag == 1 %}
+                          <form class="row g-3" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-auto" style="margin-left: 30px;">
+                              <div class="mb-3">
+                                <input class="form-control" name="answer" type="file" required>
+                              </div>
+                              <input type="hidden" name="task_id" class="form-control" id="inputPassword2" value="{{task.id}}">
+                            </div>
+                            <div class="col-auto">
+                              <button type="submit" class="btn btn-primary mb-3">Отправить</button>
+                            </div>
+                          </form>
+                          {% endif %}
                       </div>
                       <hr>
                     {% endfor %}

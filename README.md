@@ -11,4 +11,5 @@
 7) Установить нужные версии пакетов командой `pip install -r requirements.txt`
 8) Создаем миграцию базы данных `python manage.py migrate`
 9) Собираем статику `python manage.py colectstatic`
-10) В CMD(venv) поднимаем сервер командой  `python manage.py runserver` теперь сайт висит на `localhost` c адресом `http://127.0.0.1:8000`
+10) В CMD(venv) поднимаем celery `python -m celery -A LMS_settings worker`
+11) В CMD(venv) поднимаем сервер командой  `python manage.py runserver` теперь сайт висит на `localhost` c адресом `http://127.0.0.1:8000`

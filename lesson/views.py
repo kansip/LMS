@@ -16,6 +16,7 @@ from LMS_settings.menu import get_context_menu, HOME_PAGE_NAME
 from LMS_settings.celery import app
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 @login_required
@@ -26,6 +27,8 @@ def lesson_view(request, course_id, lesson_id):
         context['lesson']=Lesson.objects.get(id=lesson_id)
         context['course']=Course.objects.get(id=course_id)
         context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
+        context['staff'] = request.user.is_staff
+        print(request.user.is_staff)
     except:
         raise Http404("Такого занятия нет")
     if len(Lesson.objects.get(id=lesson_id).blocks.all())==0:
@@ -41,18 +44,31 @@ def block_view(request, course_id, lesson_id,block_id):
     try:
         context['lesson']=Lesson.objects.get(id=lesson_id)
         context['course']=Course.objects.get(id=course_id)
-        context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
-       # context['Tasks']=TaskGroup.objects.get(id=block_id).tasks.all()
+        context['staff'] = request.user.is_staff 
+        if request.user.is_staff:
+            context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
+        else:
+            context['blocks']=Lesson.objects.get(id=lesson_id).blocks.filter(open=1)
+
     except:
         raise Http404("Такого занятия нет")
     if request.method == 'POST':
-        answer=request.POST['answer']
         task_id=request.POST['task_id']
         task=Task.objects.get(id=task_id)
-        score=check(answer,task)
-        TaskAnswers.objects.create(answer=answer,user=request.user,time=datetime.datetime.now(),score=score,task=task)
-    tasks=TaskGroup.objects.get(id=block_id).tasks.all()
-    print(tasks)
+        if task.text_format_flag==1:
+            answer=request.POST['answer']
+            score=check(answer,task)
+            TaskAnswers.objects.create(answer=answer,user=request.user,time=datetime.datetime.now(),score=score,task=task)
+        else:
+            answer = request.FILES['answer']
+            fs = FileSystemStorage()
+            filename = fs.save(answer.name, answer)
+            TaskAnswers.objects.create(user=request.user,time=datetime.datetime.now(),score=0,task=task, files=answer)
+    if TaskGroup.objects.get(id=block_id).open or request.user.is_staff:
+        tasks=TaskGroup.objects.get(id=block_id).tasks.all()
+    else:
+        #context['Tasks']= 
+        return render(request,'lesson.html',context)
     final_score=list()
     for i in range(len(tasks)):
         ans_task_user=TaskAnswers.objects.filter(task=tasks[i]).filter(user=request.user)
@@ -64,7 +80,6 @@ def block_view(request, course_id, lesson_id,block_id):
         else:
             final_score.append([tasks[i], 0])
     context['Tasks']=final_score
-    print(final_score)
     return render(request,'lesson.html',context)
 
 @staff_member_required
@@ -131,11 +146,14 @@ def settings(request, course_id, lesson_id):
                 else:
                     rev_task = False
                 task = 0
-                if radio_file_flag == 'text':
+                if radio_file_flag == 'test':
                     task = Task.objects.create(name=name_task,cost=cost_task,desc=desc_task,revizion_format_flag=rev_task,file_format_flag=False,text_format_flag=True)
                     task.save()
+                elif radio_file_flag == 'text':
+                    task = Task.objects.create(name=name_task,cost=0,desc=desc_task,revizion_format_flag=False,file_format_flag=False,text_format_flag=False)
+                    task.save()
                 else:
-                    task = Task.objects.create(name=name_task,cost=cost_task,desc=desc_task,revizion_format_flag=rev_task,file_format_flag=True,text_format_flag=False)
+                    task = Task.objects.create(name=name_task,cost=cost_task,desc=desc_task,revizion_format_flag=True,file_format_flag=True,text_format_flag=False)
                     task.save()
                 task_group = TaskGroup.objects.get(id=int(request.POST['block_id']))
                 task_group.tasks.add(task)

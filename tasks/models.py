@@ -3,14 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor_uploader.fields import RichTextUploadingField
 
-class TaskFiles(models.Model):
-    files = models.FileField(upload_to = 'uploads/')
-
 class Task(models.Model):
     name = models.CharField(max_length = 120)
     desc = RichTextUploadingField(blank=True, null=True)
     cost = models.IntegerField()
-    files = models.ManyToManyField(TaskFiles)
     revizion_format_flag = models.BooleanField(default = 0)
     file_format_flag = models.BooleanField(default = 0)
     text_format_flag = models.BooleanField(default = 1)
@@ -23,6 +19,7 @@ class TaskAnswers(models.Model):
     score = models.IntegerField()
     revizion = models.BooleanField(default = 0)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    files = models.FileField(upload_to = 'user_answers', blank=True)
 
 class TaskTrueAnswers(models.Model):
     task_id = models.ForeignKey(Task, on_delete = models.CASCADE)
