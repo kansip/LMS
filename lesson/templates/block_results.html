@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}
+Урок
+{% endblock %}
+{% block extended_content %}
+{% autoescape off %}
+<div class="container" style="padding-top:20px;">
+    <div class="row">
+        <div class="col-3">
+            {% include 'teacher_left_block_lesson.html' %}
+        </div>
+        <div class="col-9">
+            <h4 style="margin-top: 60px;">Резульаты блока {{this_block.name}}</h4>
+            <table border="1">
+                <tr>
+                 <th style="padding: 10px;">ФИО</th>
+                 {%for task in tasks %}
+                 <th style="padding: 10px;">{{task.name}}({{task.cost}})</th>
+                 {%endfor%}
+                 <th style="padding: 10px;">Баллов</th>
+                </tr>
+                {%for result,scores,sum in results %}
+                <tr>
+                    <td style="padding: 10px;">{{result.first_name}} {{result.last_name}} </td>
+                    {%for score in scores %}
+                        {% if score !=  0  %}
+                        <td style="padding: 10px;text-align: center;background-color: #77dd77;">{{score}}</td>
+                        {% else %}
+                        <td style="padding: 10px;text-align: center;">{{score}}</td>
+                        {% endif %}
+                    {%endfor%}
+                    <td style="padding: 10px;">{{sum}}</td>
+                </tr>
+                {%endfor%}
+               </table>
+                
+        </div>
+    </div>
+</div>
+{% endautoescape %}
+{% endblock %}

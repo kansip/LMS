@@ -8,8 +8,14 @@
     <div id="container" class="container mt-5 mb-5">
         <div class="card">
             <div class="card-header" style="background-color: rgba(0, 0, 0, 0);">
+                {% if request.user.is_superuser %}
+                <div style="float: right;">
+                    <a href="{{user.id}}/settings" class="btn btn-primary stretched-link">Настройки</a>
+                </div>
+                {% endif %}
                 <div class="row align-items-center" style="justify-content: center;">
                     <div class="col-auto">
+                        
                         <figure class="figure text-center">
 
                             <figcaption style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -39,24 +45,21 @@
                     </tr>
                     <tr>
                         <td >Уровень доступа</td>
-                        <td class="aligned"> {{ syn }}</td>
-                    </tr>
-                    <tr>
-                        <td >Группа</td>
-                        <td class="aligned"> {{ user.profile.group}}</td>
-                    </tr>
+                        {% if user.is_superuser %}
+                        <td class="aligned"> Администратор</td>
+                        {% elif user.is_staff %}
+                        <td class="aligned"> Преподаватель</td>
+                        {% else %}
+                        <td class="aligned"> Ученик </td>
+                        {% endif %}
+                    </tr>  
                     <tr>
                         <td>Дата регистрации</td>
                         <td class="aligned">{{ user.date_joined }}</td>
                     </tr>
 
                     </tbody>
-
                 </table>
-                {% if permission == True %}
-                    <div class="text-center mt-4"><a href="/user/{{user.id}}/settings">Настройки</a></div>
-                {% endif %}
-            </div>
         </div>
     </div>
 {% endblock %}

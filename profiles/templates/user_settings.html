@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Настройки профиля
+{% endblock %}
+{% block extended_content %}
+    <div id="container" class="container mt-5 mb-5">
+        <div class="card">
+            <div class="card-header" style="background-color: rgba(0, 0, 0, 0);">
+                <div class="row align-items-center" style="justify-content: center;">
+                    <div class="col-auto">
+                        <figure class="figure text-center">
+
+                            <figcaption style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <h1 style="margin-top: 10px; margin-bottom: 0; white-space: nowrap; font-size: 2rem; font-weight: 400;">
+                                    <span>{{ user.username }}</span></h1>
+
+                                <h2 style="margin:2px; font-size: .85714286em;"><span>Пользователь</span><br></h2>
+                                <h2 style="margin:2px; font-size: .85714286em;"><span>{{ syn }}</span><br></h2>
+
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+        <div class="card-body">
+                <h5 class="card-title">Основная информация</h5>
+
+                <table class="table" style="margin-left: 0.25rem">
+                    <tbody>
+                    <tr>
+                        <td>Имя</td>
+                        <td class="aligned"> <input name="first_name" type="text" class="form-control" value="{{user.first_name}}"></td>
+                    </tr>
+                     <tr>
+                        <td >Фамилия</td>
+                        <td class="aligned"> <input name="last_name" type="text" class="form-control" value="{{user.last_name}}"></td>
+                    </tr>
+                    <tr>
+                        <td>Логин</td>
+                        <td class="aligned"> <input name="username" type="text" class="form-control" value="{{user.username}}"></td>
+                    </tr>
+                    <tr>
+                        <td>Новый пароль</td>
+                        <td class="aligned"> <input name="password" type="text" class="form-control" value="" placeholder=" Оставьте пустым, если не хотите менять"></td>
+                    </tr>
+                     <tr>
+                        <td >Заблокировать</td>
+                        {% if user.is_active %}
+                        <td class="aligned">  <input name="bans" type="checkbox"  value="bans" > Забанен</td>
+                        {% else %}
+                        <td class="aligned">  <input name="bans" type="checkbox"  value="bans" checked> Забанен</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td >Уровень доступа</td>
+                        {% if user.is_staff %}
+                        <td class="aligned">  <input name="teacher" type="checkbox"  value="no_teacher" checked> Преподаватель</td>
+                        {% else %}
+                        <td class="aligned">  <input name="teacher" type="checkbox"  value="teacher" > Преподаватель</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td >Уровень доступа</td>
+                        {% if user.is_superuser %}
+                        <td class="aligned">  <input name="admin" type="checkbox"  value="no_admin" checked> Администратор</td>
+                        {% else %}
+                        <td class="aligned">  <input name="admin" type="checkbox"  value="admin" > Администратор</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Группа</td>
+                        <td class="aligned"> 
+                            <select id="example-multiple-selected" multiple="multiple" style="width: 200px;">
+                                {% for group in groups %}
+                                    {% if group in user.groups.all %}
+                                    <option value="{{ group.name }}" selected="selected">{{ group.name }}</option>         
+                                    {% else %}
+                                    <option value="{{group.name}}">{{ group.name }}</option>  
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+
+                        </td>
+                        
+                    </tr>
+
+                    </tbody>
+                </table>
+            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+            </div>
+        </div>
+
+
+            </form>
+        </div>
+    </div>
+{%endblock%}

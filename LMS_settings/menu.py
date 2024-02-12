@@ -59,9 +59,11 @@ def get_context_left_menu(request, current_name):
         menu.append(login_menu_item)
         menu.append(register_menu_item)
 
-    if request.user.groups.filter(name="teachers").exists():  
+    if request.user.is_staff:  
         menu.append(course_teaching_item)
         menu.append(course_create_item)
+    if request.user.is_superuser:  
+        menu.append(user_list_item)
     for item in menu:
         if item.name == current_name:
             item.is_active = True

@@ -30,7 +30,6 @@
                     </div>
                 </form>
                 <div>
-                    {% include 'scoreboard_task.html'%}
                 </div>
                 {% elif task.format_flag == 1 %}
                 <form method="POST">
@@ -41,7 +40,6 @@
                         <button type="submit" class="btn btn-dark">Отправить</button>
                     </div>
                 </form>
-                    {% include 'scoreboard_task.html'%}
                 {% endif %}
             </div>
             <br>

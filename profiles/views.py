@@ -3,9 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from LMS_settings.menu import get_context_menu, REGISTER_PAGE_NAME, LOGIN_PAGE_NAME, HOME_PAGE_NAME, USER_PAGE_NAME
+from django.contrib.auth.models import User, Group
+from django.contrib.admin.views.decorators import staff_member_required
+from LMS_settings.menu import *
 from profiles.forms import RegisterForm, LoginForm
+from django.contrib.auth.decorators import user_passes_test
 
 
 def index(request):
@@ -117,3 +119,47 @@ def user_page_view(request, user_id):
         return render(request, 'user.html', context)
     else:
         raise Http404("У вас нет прав")
+
+@staff_member_required
+def user_list_view(request):
+    context = {'menu': get_context_menu(request, USER_LIST_NAME)}
+    context["users"] = User.objects.all()
+    return render(request,"user_list.html",context)
+
+
+@user_passes_test(lambda u: u.is_superuser) 
+def user_settings_view(request, user_id):
+    context = {'menu': get_context_menu(request, USER_LIST_NAME)}
+    context["groups"] = Group.objects.all()
+    user=User.objects.get(id=user_id)
+    context["user"] = user
+    if request.method == "POST":
+        user.username = request.POST['username']
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        password = request.POST['password']
+        if password != '':
+            user.set_password(password)
+        if 'ban' in request.POST:
+            user.is_active = False
+        else:
+            user.is_active = True
+        if 'teacher' in request.POST:
+            user.is_staff = True
+            group = Group.objects.get(name='teachers')
+            group.user_set.add(user)
+        else:
+            user.is_staff = False
+            group = Group.objects.get(name='teachers')
+            group.user_set.remove(user)
+            
+        if 'admin' in request.POST:
+            user.is_superuser = True
+            group = Group.objects.get(name='admins')
+            group.user_set.add(user)
+        else:
+            user.is_superuser = False
+            group = Group.objects.get(name='admins')
+            group.user_set.remove(user)
+        user.save()
+    return render(request,"user_settings.html",context)

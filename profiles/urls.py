@@ -1,6 +1,6 @@
 """ Роутинг, каким либо способом связанный с пользователем """
 from django.urls import path
-from .views import index, login_view, logout_view, main_page_view, register_view, user_page_view
+from .views import *
 
 urlpatterns = [
     path('', index),
@@ -8,5 +8,7 @@ urlpatterns = [
     path('register/', register_view),
     path('main/', main_page_view),
     path('logout/',logout_view),
-    path('user/<int:user_id>', user_page_view)
+    path('user/<int:user_id>', user_page_view),
+    path('user/<int:user_id>/settings', user_settings_view),
+    path('user/list', user_list_view)
 ]

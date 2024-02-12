@@ -3,6 +3,7 @@ from itertools import chain
 import re
 import datetime
 from typing import TYPE_CHECKING
+from django.db.models import Q
 from tasks.models import TaskGroup, Task, TaskTrueAnswers,TaskAnswers
 from tasks.checker import *
 from django.contrib.auth.models import Group, User
@@ -67,7 +68,6 @@ def block_view(request, course_id, lesson_id,block_id):
     if TaskGroup.objects.get(id=block_id).open or request.user.is_staff:
         tasks=TaskGroup.objects.get(id=block_id).tasks.all()
     else:
-        #context['Tasks']= 
         return render(request,'lesson.html',context)
     final_score=list()
     for i in range(len(tasks)):
@@ -173,3 +173,34 @@ def delete_block(request, course_id, lesson_id,block_id):
         raise Http404("Такого занятия нет")
     path='/course/'+str(course_id)+'/'+str(lesson_id)+'/settings'
     return redirect(path)
+
+@staff_member_required
+def results_block_view(request, course_id, lesson_id, block_id):
+    context = {'menu': get_context_menu(request, HOME_PAGE_NAME)} #заменить
+    try:
+        context['lesson']=Lesson.objects.get(id=lesson_id)
+        context['course']=Course.objects.get(id=course_id)
+        context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
+        context['this_block'] = TaskGroup.objects.get(id=block_id)
+    except:
+        raise Http404("Такого занятия нет")
+    users=Course.objects.get(id=course_id).students.user_set.all()
+    tasks=TaskGroup.objects.get(id=block_id).tasks.filter(Q(file_format_flag=1) | Q(text_format_flag=1))
+    context['tasks'] = tasks
+    context['users'] = users
+    final_score=list()
+    for i in range(len(users)):
+        score_tasks=list()
+        for j in range(len(tasks)):
+            ans_task_user=TaskAnswers.objects.filter(task=tasks[j]).filter(user=users[i])
+            pref_list=list()
+            if len(ans_task_user)!=0:
+                for k in range(len(ans_task_user)):
+                    pref_list.append(int(ans_task_user[k].score))
+                score_tasks.append(max(pref_list))
+            else:
+                score_tasks.append(0)
+        final_score.append([users[i], score_tasks, sum(score_tasks)])
+    print(final_score)
+    context['results']=final_score
+    return render(request,'block_results.html',context)
