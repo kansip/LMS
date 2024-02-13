@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}
+Урок
+{% endblock %}
+{% block extended_content %}
+    <div class="container" style="padding-top:20px;"> 
+            {%for task, answers, true_answer in tasks %}
+            <div style = "border: 1px dotted grey; padding: 20px;">
+            <div>{{task.name}}</div>
+            <div>{{task.desc}}</div>
+            <hr>{% if task.text_format_flag %}
+                <div>Правильный ответ {% for true_ans in true_answer %} {{ true_ans.true_flags }}, {%endfor%}</div>
+                {%endif%}
+                {% for answer in answers %}
+                    {% if task.text_format_flag %}
+                    <form class="form-inline">
+                        <div class="form-group mb-2">
+                          <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="{{answer.user}} ответил {{answer.answer}}">
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                          <input type="hidden" class="form-control" id="inputPassword2" value="{{answer.id}}">
+                          <input type="text" class="form-control" id="inputPassword2" placeholder="Баллы max({{ task.cost}})">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Принять</button>
+                      </form>
+                    {% else %}
+                    <form class="form-inline">
+                        <div class="form-group mb-2">
+                            <!-- Кнопка-триггер модального окна -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{answer.id}}">
+                                Просмотр файла
+                            </button>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                          <input type="hidden" class="form-control" id="inputPassword2" value="{{answer.id}}"">
+                          <input type="text" class="form-control" id="inputPassword2" placeholder="Баллы max({{ task.cost}})">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Принять</button>
+                      </form>
+                    {%endif%}
+                {%endfor%}
+            <br>
+            </div>
+            <br>
+            {%endfor%}
+    
+      <!-- Модальное окно -->
+      {%for task, answers, true_answer in tasks %}
+      {% for answer in answers %}
+      <div class="modal fade" id="exampleModal{{answer.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{answer.id}}" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Посылка {{answer.user.first_name}} {{answer.user.last_name}}</h5>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+              <img src="{{answer.files.url}}" style="width: 450px; margin:auto;" alt=" Это текстовый файл"> 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              <a type="button" class="btn btn-primary" href="{{answer.files.url}}">Скачать</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+      {%endfor%}
+</div>
+
+{% endblock %}  
+
+  

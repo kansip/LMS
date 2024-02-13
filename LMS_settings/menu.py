@@ -25,6 +25,7 @@ USER_PAGE_NAME = "user"
 LOGOUT_PAGE_NAME = "logout"
 
 HOME_PAGE_NAME = "index"
+VERIFICATION_PAGE_NAME = "verification"
 
 USER_LIST_NAME =  "user_list"
 USER_TASK_NAME =  "task_list"
@@ -38,6 +39,7 @@ my_user_menu_item = MenuItem(LOGOUT_PAGE_NAME, "Профиль", "/user/")
 logout_menu_item = MenuItem(LOGOUT_PAGE_NAME, "Выход", "/logout")
 
 home_menu_item = MenuItem(HOME_PAGE_NAME, "Главная", "/")
+verification_menu_item = MenuItem(VERIFICATION_PAGE_NAME, "Проверка", "/verification/")
 user_list_item = MenuItem(USER_LIST_NAME, "Список пользователей", "/user/list")
 user_task_item = MenuItem(USER_TASK_NAME, "Список всех задач", "/task/list")
 course_study_item = MenuItem(COURSE_STUDY_NAME, "Мои курсы", "/course/study")
@@ -59,7 +61,8 @@ def get_context_left_menu(request, current_name):
         menu.append(login_menu_item)
         menu.append(register_menu_item)
 
-    if request.user.is_staff:  
+    if request.user.is_staff: 
+        menu.append(verification_menu_item) 
         menu.append(course_teaching_item)
         menu.append(course_create_item)
     if request.user.is_superuser:  

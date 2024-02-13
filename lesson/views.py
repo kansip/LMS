@@ -29,7 +29,8 @@ def lesson_view(request, course_id, lesson_id):
         context['course']=Course.objects.get(id=course_id)
         context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
         context['staff'] = request.user.is_staff
-        print(request.user.is_staff)
+        if Lesson.objects.get(id=lesson_id).open == False and request.user.is_staff == 0:
+            raise Http404("Занятие закрыто")
     except:
         raise Http404("Такого занятия нет")
     if len(Lesson.objects.get(id=lesson_id).blocks.all())==0:
@@ -42,6 +43,7 @@ def lesson_view(request, course_id, lesson_id):
 def block_view(request, course_id, lesson_id,block_id):
     """ Просмотр определенного занятия"""
     context = {'menu': get_context_menu(request, HOME_PAGE_NAME)} #заменить3
+    
     try:
         context['lesson']=Lesson.objects.get(id=lesson_id)
         context['course']=Course.objects.get(id=course_id)
@@ -50,7 +52,8 @@ def block_view(request, course_id, lesson_id,block_id):
             context['blocks']=Lesson.objects.get(id=lesson_id).blocks.all()
         else:
             context['blocks']=Lesson.objects.get(id=lesson_id).blocks.filter(open=1)
-
+        if Lesson.objects.get(id=lesson_id).open == False and request.user.is_staff == 0:
+            raise Http404("Занятие закрыто")
     except:
         raise Http404("Такого занятия нет")
     if request.method == 'POST':
@@ -65,7 +68,7 @@ def block_view(request, course_id, lesson_id,block_id):
             fs = FileSystemStorage()
             filename = fs.save(answer.name, answer)
             TaskAnswers.objects.create(user=request.user,time=datetime.datetime.now(),score=0,task=task, files=answer)
-    if TaskGroup.objects.get(id=block_id).open or request.user.is_staff:
+    if (TaskGroup.objects.get(id=block_id).open)or request.user.is_staff:
         tasks=TaskGroup.objects.get(id=block_id).tasks.all()
     else:
         return render(request,'lesson.html',context)
@@ -145,10 +148,14 @@ def settings(request, course_id, lesson_id):
                     rev_task = True
                 else:
                     rev_task = False
+                print(rev_task)
                 task = 0
                 if radio_file_flag == 'test':
                     task = Task.objects.create(name=name_task,cost=cost_task,desc=desc_task,revizion_format_flag=rev_task,file_format_flag=False,text_format_flag=True)
                     task.save()
+                    answer=answer.split("\r\n")
+                    for ans in answer:
+                        TaskTrueAnswers.objects.create(true_flags=ans,task_id=task)
                 elif radio_file_flag == 'text':
                     task = Task.objects.create(name=name_task,cost=0,desc=desc_task,revizion_format_flag=False,file_format_flag=False,text_format_flag=False)
                     task.save()
@@ -157,7 +164,7 @@ def settings(request, course_id, lesson_id):
                     task.save()
                 task_group = TaskGroup.objects.get(id=int(request.POST['block_id']))
                 task_group.tasks.add(task)
-                TaskTrueAnswers.objects.create(true_flags=answer,task_id=task)
+                
     context['myform'] = TaskForms()
     return render(request,'lesson_setting.html',context)
 

@@ -26,8 +26,14 @@
                 style="background:#ADD8E6;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
             <div style="border-radius:100%;background:#447f91;width:10px;height:10px;margin-top:10px;"></div>
             <div style="margin-top:-17px;margin-left:20px;color:#447f91;">{{block.name}}</div>
+            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+            &#9881;
+          </button>
         </div>
+        
     </a>
+    
     <div style="margin:10px;">
         <ol style="margin-left:-10px;">
         {%for task in block.tasks.all%}
@@ -44,7 +50,11 @@
                 style="background:#90EE90;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
             <div style="border-radius:100%;background:#4a7857;width:10px;height:10px;margin-top:10px;"></div>
             <div style="margin-top:-17px;margin-left:20px;color:#4a7857;">{{block.name}}</div>
-        </div>
+            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+             &#9881;
+           </button>
+          </div>
     </a>
     <div style="margin:10px;">
         <ol style="margin-left:-10px;">
@@ -61,7 +71,11 @@
         <div style="background:#f7dc97;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
             <div style="border-radius:100%;background:#917c44;width:10px;height:10px;margin-top:10px;"></div>
             <div style="margin-top:-17px;margin-left:20px;color:#917c44;">{{block.name}}</div>
-        </div>
+            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+             &#9881;
+           </button>
+          </div>
     </a>
     <div style="margin:10px;">
         <ol style="margin-left:-10px;">
@@ -79,7 +93,11 @@
                 style="background:#FFC0CB;color:black;padding-top:10px;border-radius:10px 10px 0px 0px;padding-left:20px;padding-bottom:10px;">
             <div style="border-radius:100%;background:#A60000;width:10px;height:10px;margin-top:10px;"></div>
             <div style="margin-top:-17px;margin-left:20px;color:#A60000;">{{block.name}}</div>
-        </div>
+            <a href="/course/{{course.id}}/{{lesson.id}}/{{block.id}}/delete_block">&#9746;</a>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#block-setting-Modal{{ block.id }}">
+             &#9881;
+           </button>
+          </div>
     </a>
     <div style="margin:10px;">
         <ol style="margin-left:-10px;">
@@ -392,9 +410,9 @@
           </div>
           <div class="form-check">
             {% if block.open %}
-                    <input type="checkbox" name="rev-task"  checked class="form-check-input" id="exampleCheck1">
+                    <input type="checkbox" name="rev_task"  checked class="form-check-input" id="exampleCheck1">
             {% else %}
-                    <input type="checkbox" name="rev-task" class="form-check-input" id="exampleCheck1">
+                    <input type="checkbox" name="rev_task" class="form-check-input" id="exampleCheck1">
             {% endif %}
             <label class="form-check-label" for="exampleCheck1">Ручная проверка</label>
           </div>

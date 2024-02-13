@@ -24,8 +24,8 @@ def course_view(request, course_id):
         name_group=group_course_name(course_id)
         if request.user.groups.filter(name=name_group).exists():
             return render(request, 'course.html', context)
-        elif request.user == course.teacher:
-            return render(request, 'course.html', context)
+        elif request.user == course.teacher or request.user.is_superuser:
+            return render(request, 'course_admin.html', context)
         else:
             raise Http404("Вы не подключены к курсу")
     except Course.DoesNotExist: #Ответ на не найденный курс
@@ -152,7 +152,7 @@ def course_settings(request, course_id):
         elif "add_lesson" in request.POST:
             lesson=Lesson.objects.create(course_id=course_id,
                                         teacher=course.teacher, 
-                                        name=str(hash(request.POST["csrfmiddlewaretoken"][::10])),
+                                        name="Занятие не готово",
                                         date=None)
             lesson.save()
     return render(request, 'course_settings.html', context)

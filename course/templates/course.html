@@ -5,13 +5,6 @@
 {% block extended_content %}
 <div id="container" class="container mt-5 mb-5">
 <div style="border:1px solid grey;border-radius: 5px;padding: 10px;">
-  {% if course.teacher == request.user %}
-  <div style="float: right;">
-    <a class="btn btn-primary" data-bs-toggle="collapse" href="/course/{{course.id}}/settings" role="button" aria-expanded="false" aria-controls="collapseExample">
-      Настройка
-    </a>
-  </div>
-  {% endif %}
   <div>
     <img style="border-radius: 100%;width: 200px;height: 200px;" src="{{ course.image.url }}">
   </div>
@@ -26,9 +19,13 @@
     <table class="table table-hover">
   <tbody>
   {%for lesson in lessons %}
+  {% if lesson.open %}
     <tr>
-      <td><a href="/course/{{course.id}}/{{lesson.id}}" style="color:black">{{lesson.name}}</a></td>
+      <td><a href="/course/{{course.id}}/{{lesson.id}}" style="color:black">{{lesson.name}}</a>
+        <div style="float: right;">{{lesson.date}}</div>
+      </td>
     </tr>
+    {%endif%}
     {%endfor%}
   </tbody>
 </table>

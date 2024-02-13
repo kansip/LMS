@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('profiles.urls')),
     path('course/',include('course.urls')),
     path('course/<int:course_id>/', include('lesson.urls')),
-    path('course/<int:course_id>/', include('tasks.urls')),
+    path('', include('tasks.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls'))
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
