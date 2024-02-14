@@ -13,18 +13,20 @@
                 {%endif%}
                 {% for answer in answers %}
                     {% if task.text_format_flag %}
-                    <form class="form-inline">
+                    <form class="form-inline" method="POST" enctype="multipart/form-data">
+                      {% csrf_token %}
                         <div class="form-group mb-2">
                           <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="{{answer.user}} ответил {{answer.answer}}">
                         </div>
                         <div class="form-group mx-sm-3 mb-2">
-                          <input type="hidden" class="form-control" id="inputPassword2" value="{{answer.id}}">
-                          <input type="text" class="form-control" id="inputPassword2" placeholder="Баллы max({{ task.cost}})">
+                          <input type="hidden" class="form-control" id="inputPassword2" name ="answer_id" value="{{answer.id}}">
+                          <input type="text" class="form-control" id="inputPassword2" name="score" placeholder="Баллы max({{ task.cost}})">
                         </div>
                         <button type="submit" class="btn btn-primary mb-2">Принять</button>
                       </form>
                     {% else %}
-                    <form class="form-inline">
+                    <form class="form-inline" method="POST" enctype="multipart/form-data">
+                      {% csrf_token %}
                         <div class="form-group mb-2">
                             <!-- Кнопка-триггер модального окна -->
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{answer.id}}">
@@ -32,8 +34,8 @@
                             </button>
                         </div>
                         <div class="form-group mx-sm-3 mb-2">
-                          <input type="hidden" class="form-control" id="inputPassword2" value="{{answer.id}}"">
-                          <input type="text" class="form-control" id="inputPassword2" placeholder="Баллы max({{ task.cost}})">
+                          <input type="hidden" class="form-control" id="inputPassword2" name ="answer_id" value="{{answer.id}}">
+                          <input type="text" class="form-control" id="inputPassword2" name="score" placeholder="Баллы max({{ task.cost}})">
                         </div>
                         <button type="submit" class="btn btn-primary mb-2">Принять</button>
                       </form>
@@ -47,6 +49,7 @@
       <!-- Модальное окно -->
       {%for task, answers, true_answer in tasks %}
       {% for answer in answers %}
+      {% if task.file_format_flag %}
       <div class="modal fade" id="exampleModal{{answer.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{answer.id}}" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -55,7 +58,9 @@
               <button type="button" class="btn-close" data-dismiss="modal" aria-label="Закрыть"></button>
             </div>
             <div class="modal-body">
-              <img src="{{answer.files.url}}" style="width: 450px; margin:auto;" alt=" Это текстовый файл"> 
+              {% if answer.files %}
+                <img src="{{answer.files.url}}" style="width: 450px; margin:auto;" alt=" Это текстовый файл"> 
+              {% endif %}
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -64,6 +69,7 @@
           </div>
         </div>
       </div>
+      {% endif %}
       {%endfor%}
       {%endfor%}
 </div>

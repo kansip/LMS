@@ -62,12 +62,14 @@ def block_view(request, course_id, lesson_id,block_id):
         if task.text_format_flag==1:
             answer=request.POST['answer']
             score=check(answer,task)
-            TaskAnswers.objects.create(answer=answer,user=request.user,time=datetime.datetime.now(),score=score,task=task)
+            taskans=TaskAnswers.objects.create(answer=answer,user=request.user,time=datetime.datetime.now(),score=score,task=task)
+            taskans.save()
         else:
             answer = request.FILES['answer']
             fs = FileSystemStorage()
             filename = fs.save(answer.name, answer)
-            TaskAnswers.objects.create(user=request.user,time=datetime.datetime.now(),score=0,task=task, files=answer)
+            taskans = TaskAnswers.objects.create(user=request.user,time=datetime.datetime.now(),score=0,task=task, files=answer)
+            taskans.save()
     if (TaskGroup.objects.get(id=block_id).open)or request.user.is_staff:
         tasks=TaskGroup.objects.get(id=block_id).tasks.all()
     else:

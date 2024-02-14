@@ -6,6 +6,8 @@ from tasks.models import TaskGroup,Task,TaskAnswers, TaskTrueAnswers
 from course.models import Course
 from LMS_settings.menu import *
 from django.http.response import Http404
+from django.contrib.auth.decorators import login_required
+from .utils import Calendar
 
 @staff_member_required
 def create_task(request, course_id, lesson_id, block_id):
@@ -47,10 +49,26 @@ def verification_tasks(request):
             tasks.append(task)
     ans_and_tasks=list()
     for task in tasks:
-        ans = TaskAnswers.objects.filter(Q(task=task) & Q(revizion=0))
+        ans = TaskAnswers.objects.filter(Q(task=task) & Q(revizion=False))
         true_answer = TaskTrueAnswers.objects.filter(task_id=task)
-        print(true_answer)
         if len(ans):
             ans_and_tasks.append([task,ans,true_answer])
     context["tasks"]=ans_and_tasks
+    
+    if request.method == 'POST':
+        score = int(request.POST['score'])
+        answer_id = int(request.POST['answer_id'])
+        t_ans = TaskAnswers.objects.get(id=answer_id)
+        task = Task.objects.get(id=t_ans.task.id)
+        if score > task.cost:
+            score = task.cost
+        t_ans.score = score
+        t_ans.revizion = True
+        t_ans.save()
+        return redirect("/verification")
+        
     return render(request,"verification.html",context)
+
+
+def index(request):
+    pass
