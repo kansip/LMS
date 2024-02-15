@@ -8,6 +8,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from LMS_settings.menu import *
 from profiles.forms import RegisterForm, LoginForm
 from django.contrib.auth.decorators import user_passes_test
+from course.models import *
+from lesson.models import *
+from tasks.models import *
+from django.db.models import Q
+from datetime import datetime
 
 
 def index(request):
@@ -94,6 +99,44 @@ def login_view(request):
 def main_page_view(request):
     """ Главная страница """
     context = {'menu': get_context_menu(request, HOME_PAGE_NAME)}
+    if request.user.is_staff==0:
+        groups_users = request.user.groups.all()
+        courses=[]
+        for group in groups_users:
+            try:
+                course=Course.objects.get(students=group)
+            except:
+                continue
+            if course.open:
+                courses.append(course)
+        lessons=list()
+        for course in courses:
+            if Lesson.objects.filter(Q(course=course) & Q(open=True)).count()!=0:
+                lessons.append(Lesson.objects.filter(Q(course=course) & Q(open=True)))
+        #lessons.data
+        #dates=list()
+        #for lesson in lessons:
+        #    for date in lesson:
+        #        dates.append(date) 
+        #current_datetime = datetime.now()
+        #nearest_future_record=0
+        #for record in dates:
+        #    time_difference = record.date - current_datetime
+        #    if time_difference.total_seconds() > 0:  # Если разница во времени положительная (запись в будущем)
+        #        if nearest_time_difference is None or time_difference < nearest_time_difference:
+        #            nearest_time_difference = time_difference
+        #            nearest_future_record = record
+        #print(nearest_future_record.date)
+        #current_datetime = datetime.now()
+        #current_date_str = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
+        #dates_dt = [datetime.strptime(date.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S') for date in dates if date is not None]
+        #closest_date = min(dates_dt, key=lambda date: abs(date - current_datetime))
+        #print(closest_date)
+        blocks=list()
+        for lesson in lessons:
+            for block in lesson.blocks.filter(open=True):
+                blocks.append(block)
+        #print(blocks)
     return render(request, 'index.html', context)
 
 @login_required

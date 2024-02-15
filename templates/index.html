@@ -3,6 +3,23 @@
     Главная
 {% endblock %}
 {% block extended_content %}
-        <h1 style="text-align:center;">Student</h1>
-<div class="container"><h3>Мои курсы</h3></div>
+<div class="container">
+    <div style="border: 1px solid black;">
+        <h3>Ближайщее занятие</h3>
+        <div>Блок 1 - время до завершения - </div>
+    </div>
+    <br>
+    <div style="border: 1px solid black;">
+        <h3>Блоки по времени</h3>
+        <div>Блок 1 - время до завершения - </div>
+        <hr>
+        <div>Блок 1</div><hr>
+        <div>Блок 1</div><hr>
+        <div>Блок 1</div><hr>
+        <div>Блок 1</div>
+        {% for i in blocks%}
+            {i}
+        {%endfor%}
+    </div>
+</div>
 {% endblock %}
